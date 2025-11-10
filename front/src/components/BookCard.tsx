@@ -1,11 +1,16 @@
 import cover from "../assets/book-cover.jpg";
 
-export function BookCard(props) {
+interface BookCardProps {
+  title: string;
+  author: string;
+}
+
+export default function BookCard(props: BookCardProps) {
   return (
     <div className="mr-0 flex-1 rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
       <img src={cover} alt="Book Cover" className="w-full object-cover" />
       <div className="p-4">
-        <p className="text-lg text-gray-400 h-12 overflow-clip">
+        <p className="text-lg text-gray-500 h-12 overflow-clip">
           {props.title}
         </p>
         <p className="mt-4 text-lg">{props.author}</p>

@@ -1,4 +1,4 @@
-export function SearchBar() {
+export default function SearchBar() {
   return (
     <div className="w-full max-w-2xl mx-auto flex">
       <span className="transform translate-y-1/5 translate-x-8 text-[#C7C6CB]">

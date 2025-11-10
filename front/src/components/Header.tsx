@@ -1,18 +1,17 @@
-import logo from "../assets/open-book.png";
-export function Header() {
+export default function Header() {
   return (
     <header className="w-full">
-      <nav className="h-15 py-6 px-8 w-full flex justify-between items-center bg-white">
+      <nav className="px-10 py-6 w-full flex justify-between items-center bg-[#f8f5f1]">
         {/* #2C52CE */}
-        <div className="text-2xl flex space-x-3">
-          <img src={logo} alt="Logo" className="w-7" />
+        <div className="text-2xl text-gray-900 font-bold flex space-x-3">
+          {/*<img src={logo} alt="Logo" className="w-7" />*/}
           <p>Online Library</p>
         </div>
         <div className="flex space-x-8">
-          <ul className="flex space-x-8">
-            <li>
+          <ul className="flex space-x-8 font-medium text-gray-900">
+            {/*<li>
               <a href="/">Recommandations</a>
-            </li>
+            </li>*/}
             <li>
               <a href="/">Catégories</a>
             </li>

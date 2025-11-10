@@ -1,6 +1,6 @@
-import { CatCard } from "./CatCard";
+import CatCard from "./CatCard";
 
-export function CatListCard() {
+export default function CatListCard() {
   const categories = [
     "Litérature",
     "Science et technologie",
@@ -13,7 +13,7 @@ export function CatListCard() {
     "Mode de vie et loisirs",
   ];
   return (
-    <div className="h-full min-w-[300px] min-h-[50px] mt-7 py-10 px-10 mb-8 bg-white shadow-lg rounded-lg">
+    <div className="h-full min-w-[300px] min-h-[50px] mt-7 py-10 px-10 mb-8 bg-white shadow-lg rounded-3xl">
       <div className="h-full overflow-hidden overflow-y-auto scrollbar-hidden">
         <ul className="divide-y divide-gray-200">
           {categories.map((it) => {
