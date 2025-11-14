@@ -1,26 +1,33 @@
+import { Link } from "react-router";
+
 export default function Header() {
   return (
     <header className="w-full">
-      <nav className="px-10 py-6 w-full flex justify-between items-center bg-[#f8f5f1]">
+      <nav className="px-[3vw] py-6 w-full flex justify-between items-center bg-white">
         {/* #2C52CE */}
-        <div className="text-2xl text-gray-900 font-bold flex space-x-3">
+        <div className="text-2xl text-gray-700 font-bold flex space-x-3">
           {/*<img src={logo} alt="Logo" className="w-7" />*/}
-          <p>Online Library</p>
+          <Link to="/home">
+            <p>
+              <span className="text-[#f4b759]">Online</span>{" "}
+              <span className="text-gray-700">Library</span>
+            </p>
+          </Link>
         </div>
         <div className="flex space-x-8">
           <ul className="flex space-x-8 font-medium text-gray-900">
             {/*<li>
               <a href="/">Recommandations</a>
             </li>*/}
-            <li>
-              <a href="/">Catégories</a>
+            <li className="text-gray-700 hover:text-gray-900">
+              <Link to="/categories">Catégories</Link>
             </li>
-            <li className="left-3.5">
-              <a href="/">Historique</a>
+            <li className="left-3.5 text-gray-700 hover:text-gray-900">
+              <Link to="/history">Historique</Link>
             </li>
           </ul>
-          <div>
-            <a href="/">
+          <div className="text-gray-700 hover:text-gray-900">
+            <Link to="/login">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -36,7 +43,7 @@ export default function Header() {
                 <circle cx="12" cy="10" r="4" />
                 <circle cx="12" cy="12" r="10" />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </nav>

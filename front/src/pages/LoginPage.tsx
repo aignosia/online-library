@@ -3,7 +3,10 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f8f5f1] flex flex-col">
       <header className="flex justify-between items-center px-10 py-6">
         <div className="flex flex-col">
-          <h1 className="text-2xl font-bold text-gray-900">Online Library</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            <span className="text-[#f4b759]">Online</span>{" "}
+            <span className="text-gray-700">Library</span>
+          </h1>
         </div>
         <div className="flex items-center gap-6">
           <button className="bg-[#f4b759] hover:bg-[#f2a73e] font-medium text-gray-700 hover:text-gray-900 px-6 py-2 rounded-md transition-colors">

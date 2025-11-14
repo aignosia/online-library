@@ -1,22 +1,15 @@
 import CatCard from "./CatCard";
 
-export default function CatListCard() {
-  const categories = [
-    "Litérature",
-    "Science et technologie",
-    "Histoire",
-    "Sciences sociales et société",
-    "Art et culture",
-    "Religion et philosophie",
-    "Santé et médecine",
-    "Éducation et références",
-    "Mode de vie et loisirs",
-  ];
+interface CatListProps {
+  categories: Array<string>;
+}
+
+export default function CatListCard(props: CatListProps) {
   return (
-    <div className="h-full min-w-[300px] min-h-[50px] mt-7 py-10 px-10 mb-8 bg-white shadow-lg rounded-3xl">
+    <div className="h-full min-w-[200px] min-h-[50px] mt-7 py-6 px-6 mb-8 bg-[#f4b759] shadow-lg rounded-xl">
       <div className="h-full overflow-hidden overflow-y-auto scrollbar-hidden">
-        <ul className="divide-y divide-gray-200">
-          {categories.map((it) => {
+        <ul className="">
+          {props.categories.map((it) => {
             return (
               <li>
                 <a href="/">
