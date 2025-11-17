@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from app.config import config
 from app.config.db import SessionDep
-from app.users.models import Token
+from app.users.models import Token, UserPublic
 from app.users.services import authenticate_user, create_access_token
 
 router = APIRouter(tags=["Users"])
@@ -30,4 +30,5 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    return Token(access_token=access_token, token_type="bearer")
+    user_public = UserPublic.model_validate(user)
+    return Token(token=access_token, token_type="bearer", user=user_public)

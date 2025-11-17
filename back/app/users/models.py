@@ -22,8 +22,9 @@ class UserPublic(UserBase):
 
 
 class Token(BaseModel):
-    access_token: str
+    token: str
     token_type: str
+    user: UserPublic
 
 
 class TokenData(BaseModel):

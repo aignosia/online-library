@@ -3,8 +3,7 @@ import { Link } from "react-router";
 export default function Header() {
   return (
     <header className="w-full">
-      <nav className="px-[3vw] py-6 w-full flex justify-between items-center bg-white">
-        {/* #2C52CE */}
+      <nav className="px-[3vw] h-17 py-4 w-full flex justify-between items-center bg-white">
         <div className="text-2xl text-gray-700 font-bold flex space-x-3">
           {/*<img src={logo} alt="Logo" className="w-7" />*/}
           <Link to="/home">
@@ -16,17 +15,14 @@ export default function Header() {
         </div>
         <div className="flex space-x-8">
           <ul className="flex space-x-8 font-medium text-gray-900">
-            {/*<li>
-              <a href="/">Recommandations</a>
-            </li>*/}
-            <li className="text-gray-700 hover:text-gray-900">
+            <li className="text-gray-700 hover:text-[#f4b759]">
               <Link to="/categories">Catégories</Link>
             </li>
-            <li className="left-3.5 text-gray-700 hover:text-gray-900">
+            <li className="left-3.5 text-gray-700 hover:text-[#f4b759]">
               <Link to="/history">Historique</Link>
             </li>
           </ul>
-          <div className="text-gray-700 hover:text-gray-900">
+          <div className="text-gray-700 hover:text-[#f4b759]">
             <Link to="/login">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

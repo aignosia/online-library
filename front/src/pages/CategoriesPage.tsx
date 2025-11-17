@@ -22,7 +22,7 @@ export default function CategoriesPage(props: CategoryPageProps) {
         <div className="ml-5 p-8 bg-white grow h-fit space-y-5 rounded-xl shadow-lg">
           {subcat.map((it) => {
             return (
-              <div className="p-4 bg-[#f8f5f1] hover:bg-[#e1dbc9] rounded-xl text-lg text-gray-700 hover:text-gray-900">
+              <div className="p-4 bg-[#f8f5f1] hover:bg-[#e1dbc9] rounded-lg text-lg text-gray-700 hover:text-gray-900">
                 {it}
               </div>
             );

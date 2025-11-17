@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import BookListingPage from "./pages/BookListingPage";
+import { AuthProvider } from "./services/AuthProvider";
 
 export interface Book {
   title: string;
@@ -50,21 +51,24 @@ function App() {
   ];
   return (
     <BrowserRouter>
-      <Routes>
-        <Route
-          path="/home"
-          element={<HomePage categories={categories} books={books} />}
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/categories"
-          element={<CategoriesPage categories={categories} />}
-        />
-        <Route
-          path="/history"
-          element={<BookListingPage title="Historique" books={books} />}
-        />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route
+            path="/home"
+            element={<HomePage categories={categories} books={books} />}
+          />
+          <Route path="/login" element={<LoginPage type="login" />} />
+          <Route path="/signup" element={<LoginPage type="signup" />} />
+          <Route
+            path="/categories"
+            element={<CategoriesPage categories={categories} />}
+          />
+          <Route
+            path="/history"
+            element={<BookListingPage title="Historique" books={books} />}
+          />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
