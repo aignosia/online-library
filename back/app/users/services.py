@@ -6,7 +6,7 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from pwdlib import PasswordHash
-from sqlalchemy.orm import Session
+from sqlmodel import Session
 
 from app.config.config import settings
 from app.config.db import SessionDep

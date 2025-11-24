@@ -10,7 +10,6 @@ def seed_default_user():
     session = Session(engine)
     default_user = UserCreate(
         username="johndoe",
-        email="john@email.com",
         password="secret123",
         full_name="John Doe",
     )

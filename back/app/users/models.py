@@ -1,10 +1,9 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
 
 
 class UserBase(SQLModel):
     username: str = Field(primary_key=True, max_length=255)
-    email: EmailStr = Field(unique=True, max_length=255)
     full_name: str | None = Field(default=None, max_length=255)
     is_active: bool | None = True
 
