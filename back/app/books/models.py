@@ -3,9 +3,11 @@ from typing import TYPE_CHECKING, Optional
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
+    from app.authors.models import Author
     from app.publishers.models import Publisher, PublisherRead
-    from app.series.models import Serie
+    from app.series.models import Serie, SerieRead
 
+from app.links.models import BookAuthorLink
 from app.publishers.models import PublisherReadWithBooks
 
 
@@ -26,10 +28,13 @@ class BookBase(SQLModel):
 
 
 class Book(BookBase, table=True):
-    id: int = Field(primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
 
     publisher: Optional["Publisher"] = Relationship(back_populates="books")
     serie: Optional["Serie"] = Relationship(back_populates="books")
+    authors: list["Author"] = Relationship(
+        back_populates="books", link_model=BookAuthorLink
+    )
 
 
 class BookCreate(BookBase):
@@ -51,6 +56,7 @@ class BookReadFromAuthor(SQLModel):
 
 class BookReadFull(BookBase):
     publisher: Optional["PublisherRead"] = None
+    serie: Optional["SerieRead"] = None
 
 
 PublisherReadWithBooks.model_rebuild()

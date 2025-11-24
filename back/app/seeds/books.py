@@ -24,7 +24,21 @@ def show(r: Record):
     )
 
 
-map_xml(show, "downloads/pgmarc.xml")
+author_subfields = []
+
+
+def show_author_subfields(r: Record):
+    author_field = r.get_fields("100")[0] if r.get_fields("100") else None
+
+    if author_field:
+        for subfield in author_field.subfields:
+            if subfield.code not in author_subfields:
+                author_subfields.append(subfield.code)
+
+
+map_xml(show_author_subfields, "downloads/pgmarc.xml")
+
+print(author_subfields)
 
 # print(pg_fields)
 # with open("downloads/field_series.txt", "w") as f:

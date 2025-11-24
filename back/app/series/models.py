@@ -10,7 +10,7 @@ class SerieBase(SQLModel):
     name: str
 
 
-class Serie(SerieBase):
+class Serie(SerieBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
     books: list["Book"] = Relationship(back_populates="serie")

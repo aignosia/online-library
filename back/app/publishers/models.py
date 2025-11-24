@@ -13,7 +13,7 @@ class PublisherBase(SQLModel):
 class Publisher(PublisherBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
-    books: list["Book"] = Relationship(back_populates="publisher")  # noqa: F821
+    books: list["Book"] = Relationship(back_populates="publisher")
 
 
 class PublisherCreate(PublisherBase):
@@ -26,4 +26,4 @@ class PublisherRead(PublisherBase):
 
 class PublisherReadWithBooks(PublisherBase):
     id: int
-    books: list["BookRead"] = []  # noqa: F821
+    books: list["BookRead"] = []

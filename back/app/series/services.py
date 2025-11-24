@@ -13,7 +13,7 @@ def add_serie(serie: SerieCreate, session: Session):
 
 
 def get_series(offset: int, limit: int, session: Session):
-    series = session.exec(select().offset(offset).limit(limit)).all()
+    series = session.exec(select(Serie).offset(offset).limit(limit)).all()
     return series
 
 
