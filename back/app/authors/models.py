@@ -34,4 +34,4 @@ class AuthorRead(AuthorBase):
 
 class AuthorReadWithBook(AuthorBase):
     id: int
-    books: list["BookRead"]
+    books: list["BookRead"] = []

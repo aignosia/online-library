@@ -16,14 +16,14 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
 
 
-class UserPublic(UserBase):
+class UserRead(UserBase):
     pass
 
 
 class Token(BaseModel):
     token: str
     token_type: str
-    user: UserPublic
+    user: UserRead
 
 
 class TokenData(BaseModel):

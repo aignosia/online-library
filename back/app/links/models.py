@@ -6,3 +6,10 @@ class BookAuthorLink(SQLModel, table=True):
     author_id: int = Field(
         default=None, primary_key=True, foreign_key="author.id"
     )
+
+
+class BookSubjectLink(SQLModel, table=True):
+    book_id: int = Field(default=None, primary_key=True, foreign_key="book.id")
+    subject_id: int = Field(
+        default=None, primary_key=True, foreign_key="subject.id"
+    )
