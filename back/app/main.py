@@ -9,6 +9,7 @@ from app.config.config import settings
 from app.config.db import init_db
 from app.publishers.routers import router as publisher_router
 from app.series.routers import router as series_router
+from app.subjects.routers import router as subjects_router
 from app.users.auth import router as auth_router
 from app.users.routers import router as users_router
 
@@ -35,3 +36,4 @@ app.include_router(books_router)
 app.include_router(publisher_router)
 app.include_router(series_router)
 app.include_router(authors_router)
+app.include_router(subjects_router)
