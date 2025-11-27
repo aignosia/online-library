@@ -6,6 +6,7 @@ from app.links.models import BookSubjectLink
 
 if TYPE_CHECKING:
     from app.authors.models import Author, AuthorRead
+    from app.files.models import File
     from app.publishers.models import Publisher, PublisherRead
     from app.series.models import Serie, SerieRead
     from app.subjects.models import Subject, SubjectRead
@@ -28,8 +29,6 @@ class BookBase(SQLModel):
 
     publisher_id: int | None = Field(default=None, foreign_key="publisher.id")
     serie_id: int | None = Field(default=None, foreign_key="serie.id")
-    author_id: int | None = Field(default=None, foreign_key="author.id")
-    subject_id: int | None = Field(default=None, foreign_key="subject.id")
 
 
 class Book(BookBase, table=True):
@@ -43,6 +42,7 @@ class Book(BookBase, table=True):
     subjects: list["Subject"] = Relationship(
         back_populates="books", link_model=BookSubjectLink
     )
+    subjects: list["File"] = Relationship(back_populates="book")
 
 
 class BookCreate(BookBase):
@@ -67,6 +67,7 @@ class BookReadFull(BookBase):
     serie: Optional["SerieRead"] = None
     authors: list["AuthorRead"] = []
     subjects: list["SubjectRead"] = []
+    files: list["File"] = []
 
 
 PublisherReadWithBooks.model_rebuild()

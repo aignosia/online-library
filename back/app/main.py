@@ -7,6 +7,7 @@ from app.authors.routers import router as authors_router
 from app.books.routers import router as books_router
 from app.config.config import settings
 from app.config.db import init_db
+from app.files.routers import router as files_router
 from app.publishers.routers import router as publisher_router
 from app.series.routers import router as series_router
 from app.subjects.routers import router as subjects_router
@@ -37,3 +38,4 @@ app.include_router(publisher_router)
 app.include_router(series_router)
 app.include_router(authors_router)
 app.include_router(subjects_router)
+app.include_router(files_router)
