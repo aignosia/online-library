@@ -24,6 +24,5 @@ class PublisherRead(PublisherBase):
     id: int
 
 
-class PublisherReadWithBooks(PublisherBase):
-    id: int
+class PublisherReadWithBooks(PublisherRead):
     books: list["BookRead"] = []

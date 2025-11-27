@@ -24,6 +24,5 @@ class SerieRead(SerieBase):
     id: int
 
 
-class SerieReadWithBooks(SerieBase):
-    id: int
+class SerieReadWithBooks(SerieRead):
     books: list["BookRead"] = []
