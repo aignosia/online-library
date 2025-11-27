@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from app.config.db import SessionDep
-from app.users.models import User, UserCreate, UserRead
+from app.users.models import User, UserCreate, UserRead, UserReadWithBooks
 from app.users.services import add_user, get_current_active_user
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -21,8 +21,8 @@ async def read_users_me(
     return current_user
 
 
-@router.get("/me/items")
-async def read_own_items(
+@router.get("/me/books", response_model=UserReadWithBooks)
+async def read_own_book_downloads(
     current_user: Annotated[User, Depends(get_current_active_user)],
 ):
-    return [{"item_id": "Foo", "owner": current_user.username}]
+    return current_user

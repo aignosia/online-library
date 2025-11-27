@@ -1,5 +1,13 @@
+from typing import TYPE_CHECKING
+
 from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
+from sqlmodel.main import Relationship
+
+from app.links.models import UserBookDownload
+
+if TYPE_CHECKING:
+    from app.books.models import Book, BookRead
 
 
 class UserBase(SQLModel):
@@ -11,6 +19,10 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     hashed_password: str
 
+    books: list["Book"] = Relationship(
+        back_populates="users", link_model=UserBookDownload
+    )
+
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
@@ -18,6 +30,10 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     pass
+
+
+class UserReadWithBooks(UserRead):
+    books: list["BookRead"] = []
 
 
 class Token(BaseModel):

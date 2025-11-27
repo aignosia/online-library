@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.authors.models import AuthorCreate, AuthorRead
+from app.authors.models import AuthorCreate, AuthorRead, AuthorReadWithBooks
 from app.authors.services import add_author, get_author, get_authors
 from app.config.db import SessionDep
 
@@ -17,6 +17,6 @@ def read_authors(session: SessionDep, offset: int = 0, limit: int = 10):
     return get_authors(offset, limit, session)
 
 
-@router.get("/{id}", response_model=AuthorRead)
+@router.get("/{id}", response_model=AuthorReadWithBooks)
 def read_author(id: int, session: SessionDep):
     return get_author(id, session)

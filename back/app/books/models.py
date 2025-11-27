@@ -2,7 +2,12 @@ from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from app.links.models import BookSubjectLink
+from app.authors.models import AuthorReadWithBooks
+from app.files.models import FileReadWithBook
+from app.links.models import BookSubjectLink, UserBookDownload
+from app.series.models import SerieReadWithBooks
+from app.subjects.models import SubjectReadWithBooks
+from app.users.models import UserReadWithBooks
 
 if TYPE_CHECKING:
     from app.authors.models import Author, AuthorRead
@@ -10,6 +15,7 @@ if TYPE_CHECKING:
     from app.publishers.models import Publisher, PublisherRead
     from app.series.models import Serie, SerieRead
     from app.subjects.models import Subject, SubjectRead
+    from app.users.models import User
 
 from app.links.models import BookAuthorLink
 from app.publishers.models import PublisherReadWithBooks
@@ -42,7 +48,10 @@ class Book(BookBase, table=True):
     subjects: list["Subject"] = Relationship(
         back_populates="books", link_model=BookSubjectLink
     )
-    subjects: list["File"] = Relationship(back_populates="book")
+    files: list["File"] = Relationship(back_populates="book")
+    users: list["User"] = Relationship(
+        back_populates="books", link_model=UserBookDownload
+    )
 
 
 class BookCreate(BookBase):
@@ -71,3 +80,8 @@ class BookReadFull(BookBase):
 
 
 PublisherReadWithBooks.model_rebuild()
+AuthorReadWithBooks.model_rebuild()
+FileReadWithBook.model_rebuild()
+SerieReadWithBooks.model_rebuild()
+SubjectReadWithBooks.model_rebuild()
+UserReadWithBooks.model_rebuild()

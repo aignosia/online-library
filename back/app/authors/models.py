@@ -32,6 +32,6 @@ class AuthorRead(AuthorBase):
     id: int
 
 
-class AuthorReadWithBook(AuthorBase):
+class AuthorReadWithBooks(AuthorBase):
     id: int
     books: list["BookRead"] = []

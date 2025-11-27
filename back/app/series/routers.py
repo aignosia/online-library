@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.config.db import SessionDep
-from app.series.models import SerieCreate, SerieRead
+from app.series.models import SerieCreate, SerieRead, SerieReadWithBooks
 from app.series.services import add_serie, get_serie, get_series
 
 router = APIRouter(prefix="/series", tags=["Series"])
@@ -17,6 +17,6 @@ def read_series(session: SessionDep, offset: int = 0, limit: int = 10):
     return get_series(offset, limit, session)
 
 
-@router.get("/{id}", response_model=SerieRead)
+@router.get("/{id}", response_model=SerieReadWithBooks)
 def read_serie(id: int, session: SessionDep):
     return get_serie(id, session)

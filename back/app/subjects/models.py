@@ -29,6 +29,5 @@ class SubjectRead(SubjectBase):
     id: int
 
 
-class SubjectReadWithBook(SubjectBase):
-    id: int
+class SubjectReadWithBooks(SubjectRead):
     books: list["BookRead"] = []
