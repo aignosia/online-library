@@ -1,6 +1,4 @@
-from typing import Annotated
-
-from fastapi import HTTPException, Query
+from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from app.publishers.models import Publisher, PublisherCreate
@@ -14,7 +12,7 @@ def add_publisher(publisher: PublisherCreate, session: Session):
     return db_publisher
 
 
-def get_publishers(offset: int, limit: Annotated[int, Query], session: Session):
+def get_publishers(offset: int, limit: int, session: Session):
     publishers = session.exec(
         select(Publisher).offset(offset).limit(limit)
     ).all()
