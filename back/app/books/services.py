@@ -14,7 +14,7 @@ def add_book(book: BookCreate, session: Session):
     return db_book
 
 
-def get_books(offset: int, limit: Annotated[int, Query], session: Session):
+def get_books(offset: int, limit: int, session: Session):
     books = session.exec(select(Book).offset(offset).limit(limit)).all()
     return books
 

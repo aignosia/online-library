@@ -1,6 +1,4 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 
 from app.books.models import BookCreate, BookRead
 from app.books.services import add_book, get_book, get_books
@@ -15,9 +13,7 @@ def create_book(book: BookCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[BookRead])
-def read_books(
-    session: SessionDep, offset: int = 0, limit: Annotated[int, Query] = 10
-):
+def read_books(session: SessionDep, offset: int = 0, limit: int = 10):
     return get_books(offset, limit, session)
 
 

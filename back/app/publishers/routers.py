@@ -1,6 +1,4 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
 
 from app.config.db import SessionDep
 from app.publishers.models import (
@@ -19,9 +17,7 @@ def create_publisher(publisher: PublisherCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[PublisherRead])
-def read_publishers(
-    session: SessionDep, offset: int = 0, limit: Annotated[int, Query] = 10
-):
+def read_publishers(session: SessionDep, offset: int = 0, limit: int = 10):
     return get_publishers(offset, limit, session)
 
 
