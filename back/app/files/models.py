@@ -16,7 +16,7 @@ class FileBase(SQLModel):
 class File(FileBase, table=True):
     id: int = Field(default=None, primary_key=True)
 
-    books: "Book" = Relationship(back_populates="files")
+    book: "Book" = Relationship(back_populates="files")
 
 
 class FileCreate(FileBase):
