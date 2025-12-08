@@ -4,21 +4,32 @@ from sqlmodel import Field, Relationship, SQLModel
 
 from app.authors.models import AuthorReadWithBooks
 from app.files.models import FileReadWithBook
-from app.links.models import BookSubjectLink, UserBookDownload
+from app.links.models import (
+    BookAuthorLink,
+    BookSubclassLink,
+    BookSubjectLink,
+    UserBookDownload,
+)
+from app.publishers.models import PublisherReadWithBooks
 from app.series.models import SerieReadWithBooks
+from app.subclasses.models import SubclassReadWithBooks
 from app.subjects.models import SubjectReadWithBooks
 from app.users.models import UserReadWithBooks
 
 if TYPE_CHECKING:
     from app.authors.models import Author, AuthorRead
-    from app.files.models import File
-    from app.publishers.models import Publisher, PublisherRead
+    from app.files.models import File, FileRead
+    from app.publishers.models import (
+        Publisher,
+        PublisherRead,
+    )
     from app.series.models import Serie, SerieRead
+    from app.subclasses.models import (
+        Subclass,
+        SubclassRead,
+    )
     from app.subjects.models import Subject, SubjectRead
     from app.users.models import User
-
-from app.links.models import BookAuthorLink
-from app.publishers.models import PublisherReadWithBooks
 
 
 class BookBase(SQLModel):
@@ -52,6 +63,9 @@ class Book(BookBase, table=True):
     users: list["User"] = Relationship(
         back_populates="books", link_model=UserBookDownload
     )
+    subclasses: list["Subclass"] = Relationship(
+        back_populates="books", link_model=BookSubclassLink
+    )
 
 
 class BookCreate(BookBase):
@@ -76,7 +90,8 @@ class BookReadFull(BookBase):
     serie: Optional["SerieRead"] = None
     authors: list["AuthorRead"] = []
     subjects: list["SubjectRead"] = []
-    files: list["File"] = []
+    files: list["FileRead"] = []
+    subclasses: list["SubclassRead"] = []
 
 
 PublisherReadWithBooks.model_rebuild()
@@ -85,3 +100,4 @@ FileReadWithBook.model_rebuild()
 SerieReadWithBooks.model_rebuild()
 SubjectReadWithBooks.model_rebuild()
 UserReadWithBooks.model_rebuild()
+SubclassReadWithBooks.model_rebuild()

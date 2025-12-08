@@ -2,12 +2,10 @@ from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from app.categories.models import CategoryReadWithSubjects
 from app.links.models import BookSubjectLink
 
 if TYPE_CHECKING:
     from app.books.models import Book, BookRead
-    from app.categories.models import Category
 
 
 class SubjectBase(SQLModel):
@@ -35,6 +33,3 @@ class SubjectRead(SubjectBase):
 
 class SubjectReadWithBooks(SubjectRead):
     books: list["BookRead"] = []
-
-
-CategoryReadWithSubjects.model_rebuild()
