@@ -1,0 +1,395 @@
+[
+  {
+    "code": "A",
+    "name": "General Works",
+    "subclasses": [
+      { "code": "AC", "name": "Collections. Series. Collected works" },
+      { "code": "AE", "name": "Encyclopedias" },
+      {
+        "code": "AG",
+        "name": "Dictionaries and other general reference works"
+      },
+      { "code": "AI", "name": "Indexes" },
+      { "code": "AM", "name": "Museums. Collectors and collecting" },
+      { "code": "AN", "name": "Newspapers" },
+      { "code": "AP", "name": "Periodicals" },
+      { "code": "AS", "name": "Academies and learned societies" },
+      { "code": "AY", "name": "Yearbooks. Almanacs. Directories" },
+      {
+        "code": "AZ",
+        "name": "History of scholarship and learning. The humanities"
+      }
+    ]
+  },
+  {
+    "code": "B",
+    "name": "Philosophy. Psychology. Religion",
+    "subclasses": [
+      { "code": "B", "name": "Philosophy (General)" },
+      { "code": "BC", "name": "Logic" },
+      { "code": "BD", "name": "Speculative philosophy" },
+      { "code": "BF", "name": "Psychology" },
+      { "code": "BH", "name": "Aesthetics" },
+      { "code": "BJ", "name": "Ethics. Social usages. Etiquette" },
+      { "code": "BL", "name": "Religions. Mythology. Rationalism" },
+      { "code": "BM", "name": "Judaism" },
+      { "code": "BP", "name": "Islam. Baháʼísm. Theosophy, etc." },
+      { "code": "BQ", "name": "Buddhism" },
+      { "code": "BR", "name": "Christianity" },
+      { "code": "BS", "name": "The Bible" },
+      { "code": "BT", "name": "Doctrinal theology" },
+      { "code": "BV", "name": "Practical theology" },
+      { "code": "BX", "name": "Christian denominations" }
+    ]
+  },
+  {
+    "code": "C",
+    "name": "Auxiliary Sciences of History",
+    "subclasses": [
+      { "code": "C", "name": "Auxiliary sciences of history (General)" },
+      { "code": "CB", "name": "History of civilization" },
+      { "code": "CC", "name": "Archaeology" },
+      { "code": "CD", "name": "Diplomatics. Archives. Seals" },
+      { "code": "CE", "name": "Chronology. Calendar" },
+      { "code": "CJ", "name": "Numismatics" },
+      { "code": "CN", "name": "Epigraphy" },
+      { "code": "CR", "name": "Heraldry" },
+      { "code": "CS", "name": "Genealogy" },
+      { "code": "CT", "name": "Biography" }
+    ]
+  },
+  {
+    "code": "D",
+    "name": "World History",
+    "subclasses": [
+      { "code": "D", "name": "History (General)" },
+      { "code": "DA", "name": "Great Britain" },
+      { "code": "DAW", "name": "Central Europe" },
+      {
+        "code": "DB",
+        "name": "Austria, Liechtenstein, Hungary, Czech Republic, Slovakia"
+      },
+      { "code": "DC", "name": "France" },
+      { "code": "DD", "name": "Germany" },
+      { "code": "DE", "name": "Greco-Roman world" },
+      { "code": "DF", "name": "Greece" },
+      { "code": "DG", "name": "Italy" },
+      { "code": "DH", "name": "Low Countries" },
+      { "code": "DJ", "name": "Netherlands" },
+      { "code": "DJK", "name": "Eastern Europe (General)" },
+      { "code": "DK", "name": "Russia. Soviet Union. Former USSR republics" },
+      { "code": "DL", "name": "Northern Europe. Scandinavia" },
+      { "code": "DP", "name": "Spain. Portugal" },
+      { "code": "DQ", "name": "Switzerland" },
+      { "code": "DR", "name": "Balkan Peninsula" },
+      { "code": "DS", "name": "Asia" },
+      { "code": "DT", "name": "Africa" },
+      { "code": "DU", "name": "Oceania. Australia. New Zealand." },
+      { "code": "DX", "name": "Gypsies" }
+    ]
+  },
+  {
+    "code": "E",
+    "name": "History of the Americas",
+    "subclasses": [{ "code": "E", "name": "United States (General)" }]
+  },
+  {
+    "code": "F",
+    "name": "Local History of the United States and Latin America",
+    "subclasses": [
+      {
+        "code": "F",
+        "name": "United States local history / Canada / Latin America"
+      }
+    ]
+  },
+  {
+    "code": "G",
+    "name": "Geography. Anthropology. Recreation",
+    "subclasses": [
+      { "code": "G", "name": "Geography (General). Atlases. Maps" },
+      { "code": "GA", "name": "Mathematical geography. Cartography" },
+      { "code": "GB", "name": "Physical geography" },
+      { "code": "GC", "name": "Oceanography" },
+      { "code": "GE", "name": "Environmental sciences" },
+      { "code": "GF", "name": "Human ecology" },
+      { "code": "GN", "name": "Anthropology" },
+      { "code": "GR", "name": "Folklore" },
+      { "code": "GT", "name": "Manners and customs" },
+      { "code": "GV", "name": "Recreation. Leisure. Sports" }
+    ]
+  },
+  {
+    "code": "H",
+    "name": "Social Sciences",
+    "subclasses": [
+      { "code": "H", "name": "Social sciences (General)" },
+      { "code": "HA", "name": "Statistics" },
+      { "code": "HB", "name": "Economic theory. Demography" },
+      { "code": "HC", "name": "Economic history" },
+      { "code": "HD", "name": "Industries. Land use. Labor" },
+      { "code": "HE", "name": "Transportation and communications" },
+      { "code": "HF", "name": "Commerce" },
+      { "code": "HG", "name": "Finance" },
+      { "code": "HJ", "name": "Public finance" },
+      { "code": "HM", "name": "Sociology" },
+      { "code": "HN", "name": "Social history" },
+      { "code": "HQ", "name": "Family. Marriage. Women" },
+      { "code": "HS", "name": "Societies" },
+      { "code": "HT", "name": "Communities. Classes. Races" },
+      { "code": "HV", "name": "Social pathology. Welfare. Criminology" },
+      { "code": "HX", "name": "Socialism. Communism. Anarchism" }
+    ]
+  },
+  {
+    "code": "J",
+    "name": "Political Science",
+    "subclasses": [
+      { "code": "J", "name": "General legislative and executive papers" },
+      { "code": "JA", "name": "Political science (General)" },
+      { "code": "JC", "name": "Political theory" },
+      { "code": "JF", "name": "Public administration" },
+      { "code": "JG", "name": "Legislative bodies" },
+      { "code": "JH", "name": "Political institutions (General)" },
+      { "code": "JJ", "name": "Political institutions (United States)" },
+      { "code": "JK", "name": "Political institutions (U.S.)" },
+      {
+        "code": "JL",
+        "name": "Political institutions (Canada, Latin America)"
+      },
+      { "code": "JN", "name": "Political institutions (Europe)" },
+      {
+        "code": "JQ",
+        "name": "Political institutions (Asia, Africa, Oceania)"
+      },
+      { "code": "JS", "name": "Local government" },
+      {
+        "code": "JV",
+        "name": "Colonies and colonization. Emigration. Immigration"
+      },
+      { "code": "JX", "name": "International law (obsolete; replaced by KZ)" },
+      { "code": "JZ", "name": "International relations" }
+    ]
+  },
+  {
+    "code": "K",
+    "name": "Law",
+    "subclasses": [
+      { "code": "K", "name": "Law (General)" },
+      { "code": "KB", "name": "Religious law" },
+      { "code": "KD", "name": "United Kingdom" },
+      { "code": "KE", "name": "Canada" },
+      { "code": "KF", "name": "United States" },
+      { "code": "KG", "name": "Latin America" },
+      { "code": "KH", "name": "South America" },
+      { "code": "KJ", "name": "Europe (General)" },
+      { "code": "KK", "name": "Germany" },
+      { "code": "KL", "name": "Asia" },
+      { "code": "KM", "name": "Africa" },
+      { "code": "KN", "name": "Oceania" },
+      { "code": "KP", "name": "Islamic law" },
+      { "code": "KZ", "name": "International law" }
+    ]
+  },
+  {
+    "code": "L",
+    "name": "Education",
+    "subclasses": [
+      { "code": "L", "name": "Education (General)" },
+      { "code": "LA", "name": "History of education" },
+      { "code": "LB", "name": "Theory and practice of education" },
+      { "code": "LC", "name": "Special aspects of education" },
+      { "code": "LD", "name": "Individual institutions (U.S.)" },
+      { "code": "LE", "name": "Individual institutions (America except U.S.)" },
+      { "code": "LF", "name": "Individual institutions (Europe)" },
+      {
+        "code": "LG",
+        "name": "Individual institutions (Asia, Africa, Oceania)"
+      },
+      { "code": "LH", "name": "College and school magazines" },
+      { "code": "LJ", "name": "Student fraternities and societies (U.S.)" },
+      { "code": "LT", "name": "Textbooks" }
+    ]
+  },
+  {
+    "code": "M",
+    "name": "Music",
+    "subclasses": [
+      { "code": "M", "name": "Music" },
+      { "code": "ML", "name": "Literature on music" },
+      { "code": "MT", "name": "Musical instruction and study" }
+    ]
+  },
+  {
+    "code": "N",
+    "name": "Fine Arts",
+    "subclasses": [
+      { "code": "N", "name": "Fine arts (General)" },
+      { "code": "NA", "name": "Architecture" },
+      { "code": "NB", "name": "Sculpture" },
+      { "code": "NC", "name": "Drawing. Design. Illustration" },
+      { "code": "ND", "name": "Painting" },
+      { "code": "NE", "name": "Print media" },
+      { "code": "NK", "name": "Decorative arts" },
+      { "code": "NX", "name": "Arts in general" }
+    ]
+  },
+  {
+    "code": "P",
+    "name": "Language and Literature",
+    "subclasses": [
+      { "code": "P", "name": "Philology. Linguistics" },
+      { "code": "PA", "name": "Classical languages" },
+      { "code": "PB", "name": "Modern languages. Celtic languages" },
+      { "code": "PC", "name": "Romance languages" },
+      { "code": "PD", "name": "Old Germanic. Scandinavian" },
+      { "code": "PE", "name": "English language" },
+      { "code": "PF", "name": "West Germanic languages" },
+      { "code": "PG", "name": "Slavic languages. Baltic languages. Albanian" },
+      { "code": "PH", "name": "Uralic languages. Basque" },
+      { "code": "PJ", "name": "Semitic languages" },
+      { "code": "PK", "name": "Indo-Iranian languages" },
+      { "code": "PL", "name": "Languages of Eastern Asia, Africa, Oceania" },
+      {
+        "code": "PM",
+        "name": "Indigenous American languages. Artificial languages"
+      },
+      { "code": "PN", "name": "Literature (General)" },
+      {
+        "code": "PQ",
+        "name": "French, Italian, Spanish, Portuguese literature"
+      },
+      { "code": "PR", "name": "English literature" },
+      { "code": "PS", "name": "American literature" },
+      { "code": "PT", "name": "German, Dutch, Scandinavian literatures" },
+      {
+        "code": "PZ",
+        "name": "Fiction and juvenile belles-lettres (obsolete for LC)"
+      }
+    ]
+  },
+  {
+    "code": "Q",
+    "name": "Science",
+    "subclasses": [
+      { "code": "Q", "name": "Science (General)" },
+      { "code": "QA", "name": "Mathematics. Computer science" },
+      { "code": "QB", "name": "Astronomy" },
+      { "code": "QC", "name": "Physics" },
+      { "code": "QD", "name": "Chemistry" },
+      { "code": "QE", "name": "Geology" },
+      { "code": "QH", "name": "Biology" },
+      { "code": "QK", "name": "Botany" },
+      { "code": "QL", "name": "Zoology" },
+      { "code": "QM", "name": "Human anatomy" },
+      { "code": "QP", "name": "Physiology" },
+      { "code": "QR", "name": "Microbiology" }
+    ]
+  },
+  {
+    "code": "R",
+    "name": "Medicine",
+    "subclasses": [
+      { "code": "R", "name": "Medicine (General)" },
+      { "code": "RA", "name": "Public aspects of medicine" },
+      { "code": "RB", "name": "Pathology" },
+      { "code": "RC", "name": "Internal medicine" },
+      { "code": "RD", "name": "Surgery" },
+      { "code": "RE", "name": "Ophthalmology" },
+      { "code": "RF", "name": "Otorhinolaryngology" },
+      { "code": "RG", "name": "Gynecology. Obstetrics" },
+      { "code": "RJ", "name": "Pediatrics" },
+      { "code": "RK", "name": "Dentistry" },
+      { "code": "RL", "name": "Dermatology" },
+      { "code": "RM", "name": "Therapeutics. Pharmacology" },
+      { "code": "RS", "name": "Pharmacy" },
+      { "code": "RT", "name": "Nursing" },
+      { "code": "RV", "name": "Botanic, Thomsonian, eclectic medicine" },
+      { "code": "RX", "name": "Homeopathy" },
+      { "code": "RZ", "name": "Alternative medicine" }
+    ]
+  },
+  {
+    "code": "S",
+    "name": "Agriculture",
+    "subclasses": [
+      { "code": "S", "name": "Agriculture (General)" },
+      { "code": "SB", "name": "Plant culture" },
+      { "code": "SD", "name": "Forestry" },
+      { "code": "SF", "name": "Animal culture" },
+      { "code": "SH", "name": "Aquaculture. Fisheries" },
+      { "code": "SK", "name": "Hunting sports" }
+    ]
+  },
+  {
+    "code": "T",
+    "name": "Technology",
+    "subclasses": [
+      { "code": "T", "name": "Technology (General)" },
+      { "code": "TA", "name": "Engineering (General)" },
+      { "code": "TC", "name": "Hydraulic engineering" },
+      { "code": "TD", "name": "Environmental technology" },
+      { "code": "TE", "name": "Highway engineering" },
+      { "code": "TF", "name": "Railroad engineering" },
+      { "code": "TG", "name": "Bridge engineering" },
+      { "code": "TH", "name": "Building construction" },
+      { "code": "TJ", "name": "Mechanical engineering" },
+      {
+        "code": "TK",
+        "name": "Electrical engineering. Electronics. Computer engineering"
+      },
+      { "code": "TL", "name": "Motor vehicles. Aeronautics. Astronautics" },
+      { "code": "TN", "name": "Mining engineering. Metallurgy" },
+      { "code": "TP", "name": "Chemical technology" },
+      { "code": "TR", "name": "Photography" },
+      { "code": "TS", "name": "Manufacturing" },
+      { "code": "TT", "name": "Handicrafts. Trades" },
+      { "code": "TX", "name": "Home economics" }
+    ]
+  },
+  {
+    "code": "U",
+    "name": "Military Science",
+    "subclasses": [
+      { "code": "U", "name": "Military science (General)" },
+      { "code": "UA", "name": "Armies" },
+      { "code": "UB", "name": "Military administration" },
+      { "code": "UC", "name": "Maintenance and transportation" },
+      { "code": "UD", "name": "Infantry" },
+      { "code": "UE", "name": "Cavalry" },
+      { "code": "UF", "name": "Artillery" },
+      { "code": "UG", "name": "Military engineering. Aviation" },
+      { "code": "UH", "name": "Other services" }
+    ]
+  },
+  {
+    "code": "V",
+    "name": "Naval Science",
+    "subclasses": [
+      { "code": "V", "name": "Naval science (General)" },
+      { "code": "VA", "name": "Navies: Organization, distribution, etc." },
+      { "code": "VB", "name": "Naval administration" },
+      { "code": "VC", "name": "Naval seamen" },
+      { "code": "VD", "name": "Naval shore establishments" },
+      { "code": "VE", "name": "Marines" },
+      { "code": "VF", "name": "Naval ordnance" },
+      { "code": "VG", "name": "Minor services of navies" },
+      { "code": "VK", "name": "Navigation. Merchant marine" },
+      {
+        "code": "VM",
+        "name": "Naval architecture. Shipbuilding. Marine engineering"
+      }
+    ]
+  },
+  {
+    "code": "Z",
+    "name": "Bibliography. Library Science. Information Resources",
+    "subclasses": [
+      { "code": "Z", "name": "Books. Writing. Libraries" },
+      {
+        "code": "ZA",
+        "name": "Information resources. Data processing. Digital libraries"
+      }
+    ]
+  }
+]
