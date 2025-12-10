@@ -12,8 +12,8 @@ def add_class(_class: ClassCreate, session: Session):
     return db_class
 
 
-def get_classes(limit: int, offset: int, session: Session):
-    classes = session.exec(select(Class).limit(limit).offset(offset)).all()
+def get_classes(offset: int, limit: int, session: Session):
+    classes = session.exec(select(Class).offset(offset).limit(limit)).all()
     return classes
 
 

@@ -17,8 +17,8 @@ def create_subclass(subclass: SubclassCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[SubclassRead])
-def read_subclasses(session: SessionDep, limit: int, offset: int):
-    return get_subclasses(limit, offset, session)
+def read_subclasses(session: SessionDep, offset: int = 0, limit: int = 10):
+    return get_subclasses(offset, limit, session)
 
 
 @router.get("/{id}", response_model=SubclassReadWithBooks)

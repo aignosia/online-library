@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.books.models import BookCreate, BookRead
+from app.books.models import BookCreate, BookRead, BookReadFull
 from app.books.services import add_book, get_book, get_books
 from app.config.db import SessionDep
 
@@ -17,6 +17,6 @@ def read_books(session: SessionDep, offset: int = 0, limit: int = 10):
     return get_books(offset, limit, session)
 
 
-@router.get("/{id}", response_model=BookRead)
+@router.get("/{id}", response_model=BookReadFull)
 def read_book(id: int, session: SessionDep):
     return get_book(id, session)

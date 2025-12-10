@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import app.model_registry
 from app.authors.routers import router as authors_router
 from app.books.routers import router as books_router
 from app.classes.routers import router as classes_router

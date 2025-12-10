@@ -13,8 +13,8 @@ def create_class(_class: ClassCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[ClassRead])
-def read_classes(session: SessionDep, limit: int, offset: int):
-    return get_classes(limit, offset, session)
+def read_classes(session: SessionDep, offset: int = 0, limit: int = 10):
+    return get_classes(offset, limit, session)
 
 
 @router.get("/{id}", response_model=ClassReadWithSubclasses)
