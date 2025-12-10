@@ -12,9 +12,9 @@ def add_subclass(subclass: SubclassCreate, session: Session):
     return db_subclass
 
 
-def get_subclasses(limit: int, offset: int, session: Session):
+def get_subclasses(offset: int, limit: int, session: Session):
     subclasses = session.exec(
-        select(Subclass).limit(limit).offset(offset)
+        select(Subclass).offset(offset).limit(limit)
     ).all()
     return subclasses
 

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -6,7 +6,7 @@ from app.links.models import BookSubclassLink
 
 if TYPE_CHECKING:
     from app.books.models import Book, BookRead
-    from app.classes.models import Class
+    from app.classes.models import Class, ClassRead
 
 
 class SubclassBase(SQLModel):
@@ -34,3 +34,7 @@ class SubclassRead(SubclassBase):
 
 class SubclassReadWithBooks(SubclassRead):
     books: list["BookRead"] = []
+
+
+class SubclassReadWithClass(SubclassRead):
+    _class: Optional["ClassRead"] = None

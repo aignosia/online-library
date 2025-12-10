@@ -13,7 +13,7 @@ def create_file(file: FileCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[FileRead])
-def read_files(session: SessionDep, offset: int, limit: int):
+def read_files(session: SessionDep, offset: int = 0, limit: int = 10):
     return get_files(offset, limit, session)
 
 

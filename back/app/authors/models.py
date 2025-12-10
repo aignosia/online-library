@@ -9,10 +9,10 @@ if TYPE_CHECKING:
 
 
 class AuthorBase(SQLModel):
-    firstname: str
-    lastname: str
-    birth_year: int | None = Field(default=None)
-    death_year: int | None = Field(default=None)
+    lastname: str | None = Field(default=None)
+    firstname: str | None = Field(default=None)
+    birth_year: str | None = Field(default=None)
+    death_year: str | None = Field(default=None)
     fuller_name: str | None = Field(default=None)
 
 

@@ -13,7 +13,7 @@ def create_subject(subject: SubjectCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[SubjectRead])
-def read_subjects(session: SessionDep, offset: int, limit: int):
+def read_subjects(session: SessionDep, offset: int = 0, limit: int = 10):
     return get_subjects(offset, limit, session)
 
 
