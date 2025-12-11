@@ -21,6 +21,7 @@ session = Session(engine)
 
 class Cache:
     def __init__(self):
+        self.books: dict[str, Book] = {}
         self.authors: dict[str, Author] = {}
         self.publishers: dict[str, Publisher] = {}
         self.subjects: dict[str, Subject] = {}
@@ -184,16 +185,17 @@ def insert_book_in_db(record: Record):
         files=locations,
         cover=cover,
     )
-    session.add(book)
 
-    if len(session.new) % 100 == 0:
-        session.flush()
-        print(f"Processed book: {id}")
+    cache.books[id] = book
+
+    print(f"Processed book: {id}")
 
 
 def seed_database():
     print("Seeding start")
     map_xml(insert_book_in_db, "downloads/pgmarc.xml")
+    print("Adding data")
+    session.add_all(cache.books.values())
     print("Commiting data")
     session.commit()
 
