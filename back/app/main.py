@@ -5,8 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import app.model_registry
 from app.authors.routers import router as authors_router
+from app.bookclasses.routers import router as classes_router
 from app.books.routers import router as books_router
-from app.classes.routers import router as classes_router
 from app.config.config import settings
 from app.config.db import init_db
 from app.files.routers import router as files_router

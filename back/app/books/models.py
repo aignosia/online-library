@@ -8,13 +8,14 @@ from app.links.models import (
     BookSubjectLink,
     UserBookDownload,
 )
+from app.subclasses.models import SubclassReadWithBookClass
 
 if TYPE_CHECKING:
     from app.authors.models import Author, AuthorRead
     from app.files.models import File, FileRead
     from app.publishers.models import Publisher, PublisherRead
     from app.series.models import Serie, SerieRead
-    from app.subclasses.models import Subclass, SubclassRead
+    from app.subclasses.models import Subclass
     from app.subjects.models import Subject, SubjectRead
     from app.users.models import User
 
@@ -75,4 +76,4 @@ class BookReadFull(BookBase):
     authors: list["AuthorRead"] = []
     subjects: list["SubjectRead"] = []
     files: list["FileRead"] = []
-    subclasses: list["SubclassRead"] = []
+    subclasses: list["SubclassReadWithBookClass"] = []

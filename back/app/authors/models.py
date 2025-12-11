@@ -2,10 +2,11 @@ from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
 
+from app.books.models import BookReadFromAuthor
 from app.links.models import BookAuthorLink
 
 if TYPE_CHECKING:
-    from app.books.models import Book, BookRead
+    from app.books.models import Book
 
 
 class AuthorBase(SQLModel):
@@ -34,4 +35,4 @@ class AuthorRead(AuthorBase):
 
 class AuthorReadWithBooks(AuthorBase):
     id: int
-    books: list["BookRead"] = []
+    books: list["BookReadFromAuthor"] = []
