@@ -18,7 +18,7 @@ def get_authors(offset: int, limit: int, session: Session):
 
 
 def get_author(id: int, session: Session):
-    author = session.get(Session, id)
+    author = session.get(Author, id)
     if not author:
         raise HTTPException(status_code=404, detail="Author not found")
     return author

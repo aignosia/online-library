@@ -6,8 +6,8 @@ from sqlmodel import Session
 
 import app.model_registry  # noqa: F401
 from app.authors.models import Author
+from app.bookclasses.models import BookClass
 from app.books.models import Book
-from app.classes.models import Class
 from app.config.db import engine, init_db
 from app.files.models import File
 from app.publishers.models import Publisher
@@ -27,7 +27,7 @@ class Cache:
         self.subjects: dict[str, Subject] = {}
         self.series: dict[str, Serie] = {}
         self.subclasses: dict[str, Subclass] = {}
-        self.classes: dict[str, Class] = {}
+        self.bookclasses: dict[str, BookClass] = {}
 
 
 cache = Cache()
@@ -110,23 +110,24 @@ def get_book_serie(record: Record) -> Serie | None:
 def get_book_subclasses(codes: list[str], mapping: Any) -> list[Subclass]:
     subclasses = []
     for code in codes:
-        class_mapping = next(
+        bookclass_mapping = next(
             filter(lambda x: x.get("code") == code[0], mapping), None
         )
-        if not class_mapping:
+        if not bookclass_mapping:
             continue
 
-        class_name = class_mapping.get("name")
-        if not cache.classes.get(class_name):
-            cache.classes[class_name] = Class(name=class_name)
+        bookclass_name = bookclass_mapping.get("name")
+        if not cache.bookclasses.get(bookclass_name):
+            cache.bookclasses[bookclass_name] = BookClass(name=bookclass_name)
 
-        subclasses_mapping = class_mapping.get("subclasses")
+        subclasses_mapping = bookclass_mapping.get("subclasses")
         for subclass_mapping in subclasses_mapping:
             subclass_name = subclass_mapping.get("name")
             if subclass_mapping.get("code") == code:
                 if not cache.subclasses.get(subclass_name):
                     cache.subclasses[subclass_name] = Subclass(
-                        name=subclass_name, _class=cache.classes[class_name]
+                        name=subclass_name,
+                        bookclass=cache.bookclasses[bookclass_name],
                     )
                 subclasses.append(cache.subclasses[subclass_name])
                 break

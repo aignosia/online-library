@@ -7,23 +7,23 @@ if TYPE_CHECKING:
     from app.subclasses.models import Subclass, SubclassRead
 
 
-class ClassBase(SQLModel):
+class BookClassBase(SQLModel):
     name: str
 
 
-class Class(ClassBase, table=True):
+class BookClass(BookClassBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
-    subclasses: list["Subclass"] = Relationship(back_populates="_class")
+    subclasses: list["Subclass"] = Relationship(back_populates="bookclass")
 
 
-class ClassCreate(ClassBase):
+class BookClassCreate(BookClassBase):
     pass
 
 
-class ClassRead(ClassBase):
+class BookClassRead(BookClassBase):
     id: int
 
 
-class ClassReadWithSubclasses(ClassRead):
+class BookClassReadWithSubclasses(BookClassRead):
     subclasses: list["SubclassRead"] = []
