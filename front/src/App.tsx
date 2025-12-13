@@ -5,50 +5,47 @@ import LoginPage from "./pages/LoginPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import BookListingPage from "./pages/BookListingPage";
 import { AuthProvider } from "./services/AuthProvider";
+import { apiClient } from "./services/api";
+import { useEffect, useState } from "react";
+
+export interface Author {
+  id: number;
+  firstname: string;
+  lastname: string;
+  birth_year: string;
+  death_year: string;
+  fuller_name: string;
+}
 
 export interface Book {
+  id: number;
   title: string;
-  author: string;
+  authors: Array<Author>;
+  pubyear: number;
+  cover: string | null;
 }
 
 function App() {
-  const categories = [
-    "Litérature",
-    "Science et technologie",
-    "Histoire",
-    "Sciences sociales et société",
-    "Art et culture",
-    "Religion et philosophie",
-    "Santé et médecine",
-    "Éducation et références",
-    "Mode de vie et loisirs",
-  ];
-  const books: Array<Book> = [
-    {
-      title: "An Inquiry into the Nature and Causes of the Wealth of Nations",
-      author: "Adam Smith",
-    },
-    {
-      title: "An Inquiry into the Nature and Causes of the Wealth of Nations",
-      author: "Adam Smith",
-    },
-    {
-      title: "An Inquiry into the Nature and Causes of the Wealth of Nations",
-      author: "Adam Smith",
-    },
-    {
-      title: "An Inquiry into the Nature and Causes of the Wealth of Nations",
-      author: "Adam Smith",
-    },
-    {
-      title: "An Inquiry into the Nature and Causes of the Wealth of Nations",
-      author: "Adam Smith",
-    },
-    {
-      title: "An Inquiry into the Nature and Causes of the Wealth of Nations",
-      author: "Adam Smith",
-    },
-  ];
+  const [books, setBooks] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setBooks(
+        await apiClient.request("books?limit=20", {
+          method: "GET",
+        }),
+      );
+      setCategories(
+        await apiClient.request("classes", {
+          method: "GET",
+        }),
+      );
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>

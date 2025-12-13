@@ -17,7 +17,9 @@ def create_class(book_class: BookClassCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[BookClassRead])
-def read_classes(session: SessionDep, offset: int = 0, limit: int = 10):
+def read_classes(
+    session: SessionDep, offset: int = 0, limit: int | None = None
+):
     return get_classes(offset, limit, session)
 
 
