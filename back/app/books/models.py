@@ -61,7 +61,8 @@ class BookRead(SQLModel):
     id: int
     title: str
     pub_year: int
-    authors: list["AuthorRead"] | None = None
+    authors: list["AuthorRead"] = []
+    cover: str | None
 
 
 class BookReadFromAuthor(SQLModel):

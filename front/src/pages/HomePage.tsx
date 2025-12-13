@@ -4,14 +4,29 @@ import CatListCard from "../components/CatListCard";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 
+interface Categorie {
+  id: number;
+  name: string;
+}
+
 interface HomePageProps {
-  categories: Array<string>;
+  categories: Array<Categorie>;
   books: Array<Book>;
 }
 
 export default function HomePage(props: HomePageProps) {
   const bookCards = props.books.map((it) => {
-    return <BookCard key="book1" title={it.title} author={it.author} />;
+    const authorsString = it.authors
+      .map((a) => `${a.firstname ?? ""} ${a.lastname ?? ""}`)
+      .join(", ");
+    return (
+      <BookCard
+        key={`book${it.id}`}
+        title={it.title}
+        author={authorsString}
+        cover={it.cover}
+      />
+    );
   });
 
   const minCols = 5;
@@ -41,10 +56,10 @@ export default function HomePage(props: HomePageProps) {
               </div>
             </div>
           </div>
-          <div className="w-[500px] pr-8 flex flex-col">
+          <div className="w-[500px] flex flex-col">
             <p className="text-gray-500 pb-2 text-lg">Principales catégories</p>
             <div className="w-full h-px border border-gray-400"></div>
-            <CatListCard categories={props.categories} />
+            <CatListCard categories={props.categories.map((it) => it.name)} />
           </div>
         </div>
       </div>

@@ -12,10 +12,13 @@ def add_class(book_class: BookClassCreate, session: Session):
     return db_class
 
 
-def get_classes(offset: int, limit: int, session: Session):
-    bookclasses = session.exec(
-        select(BookClass).offset(offset).limit(limit)
-    ).all()
+def get_classes(offset: int, limit: int | None, session: Session):
+    if not limit:
+        bookclasses = session.exec(
+            select(BookClass).offset(offset).limit(limit)
+        ).all()
+    else:
+        bookclasses = session.exec(select(BookClass)).all()
     return bookclasses
 
 
