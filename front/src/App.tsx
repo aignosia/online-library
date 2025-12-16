@@ -25,6 +25,17 @@ export interface Book {
   cover: string | null;
 }
 
+export interface Subclass {
+  id: number;
+  name: string;
+}
+
+export interface Categorie {
+  id: number;
+  name: string;
+  subclasses: Array<Subclass>;
+}
+
 function App() {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -62,8 +73,14 @@ function App() {
           />
           <Route
             path="/history"
-            element={<BookListingPage title="Historique" books={books} />}
+            element={
+              <BookListingPage title="Historique" route="books?limit=20" />
+            }
           />
+          <Route
+            path="/category/:id"
+            element={<BookListingPage title="" />}
+          ></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
