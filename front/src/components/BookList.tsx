@@ -7,7 +7,17 @@ interface BookListProps {
 }
 export default function BookList(props: BookListProps) {
   const bookCards = props.books.map((it) => {
-    return <BookCard key="book1" title={it.title} author={it.author} />;
+    const authorsString = it.authors
+      .map((a) => `${a.firstname || ""} ${a.lastname || ""}`)
+      .join(", ");
+    return (
+      <BookCard
+        key={`book${it.id}`}
+        title={it.title}
+        author={authorsString}
+        cover={it.cover}
+      />
+    );
   });
 
   const minCols = 5;

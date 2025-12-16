@@ -1,13 +1,8 @@
-import type { Book } from "../App";
+import type { Book, Categorie } from "../App";
 import BookCard from "../components/BookCard";
 import CatListCard from "../components/CatListCard";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
-
-interface Categorie {
-  id: number;
-  name: string;
-}
 
 interface HomePageProps {
   categories: Array<Categorie>;
@@ -59,7 +54,7 @@ export default function HomePage(props: HomePageProps) {
           <div className="w-[500px] flex flex-col">
             <p className="text-gray-500 pb-2 text-lg">Principales catégories</p>
             <div className="w-full h-px border border-gray-400"></div>
-            <CatListCard categories={props.categories.map((it) => it.name)} />
+            <CatListCard categories={props.categories} />
           </div>
         </div>
       </div>

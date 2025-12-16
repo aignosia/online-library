@@ -10,7 +10,7 @@ export default function BookCard(props: BookCardProps) {
   return (
     <div className="mr-0 flex-1 rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
       <img
-        src={props.cover ?? cover}
+        src={props.cover || cover}
         alt="Book Cover"
         className="w-full object-cover"
       />

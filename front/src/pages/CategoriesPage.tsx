@@ -1,29 +1,32 @@
+import { Link } from "react-router";
+import type { Categorie } from "../App";
 import Header from "../components/Header";
 
 interface CategoryPageProps {
-  categories: Array<string>;
+  categories: Array<Categorie>;
 }
 
 export default function CategoriesPage(props: CategoryPageProps) {
-  const subcat = ["Économie", "Philosophie", "Mathématiques", "Physiques"];
   return (
-    <div className="h-screen bg-[#f8f5f1]">
+    <div className=" bg-[#f8f5f1]">
       <Header />
-      <div className="flex px-[20vw] py-8">
-        <div className="w-1/3 px-6 py-6 bg-[#f4b759] rounded-xl shadow-lg">
-          {props.categories.map((it) => {
+      <div className="flex flex-col px-[20vw] py-8">
+        <h1 className="text-3xl font-bold pb-5">Catégories</h1>
+        <div className="columns-3 gap-8">
+          {props.categories.map((cat) => {
             return (
-              <div className="px-6 py-4 hover:bg-[#f2a73e] rounded-lg font-medium text-lg text-gray-700 hover:text-gray-900">
-                {it}
-              </div>
-            );
-          })}
-        </div>
-        <div className="ml-5 p-8 bg-white grow h-fit space-y-5 rounded-xl shadow-lg">
-          {subcat.map((it) => {
-            return (
-              <div className="p-4 bg-[#f8f5f1] hover:bg-[#e1dbc9] rounded-lg text-lg text-gray-700 hover:text-gray-900">
-                {it}
+              <div
+                key={cat.id}
+                className="px-6 py-2 font-medium text-lg text-gray-900 break-inside-avoid"
+              >
+                <p className="pb-2 font-bold text-xl">{cat.name}</p>
+                {cat.subclasses.map((sc) => (
+                  <Link
+                    to={`/category/${sc.id}?name=${sc.name}&route=${"subclasses"}`}
+                  >
+                    <p className="hover:text-gray-500">{sc.name}</p>
+                  </Link>
+                ))}
               </div>
             );
           })}

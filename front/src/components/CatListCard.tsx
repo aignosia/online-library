@@ -1,7 +1,8 @@
+import type { Categorie } from "../App";
 import CatCard from "./CatCard";
 
 interface CatListProps {
-  categories: Array<string>;
+  categories: Array<Categorie>;
 }
 
 export default function CatListCard(props: CatListProps) {
@@ -13,7 +14,7 @@ export default function CatListCard(props: CatListProps) {
             return (
               <li>
                 <a href="/">
-                  <CatCard content={it} />
+                  <CatCard key={`cat${it.id}`} content={it.name} />
                 </a>
               </li>
             );
