@@ -2,9 +2,11 @@ from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from app.authors.models import Author, AuthorCreate
+from app.books.models import Book
+from app.links.models import BookAuthorLink
 
 
-def add_author(author: AuthorCreate, session: Session):
+def add_author(author: AuthorCreate, session: Session) -> Author:
     db_author = Author.model_validate(author)
     session.add(db_author)
     session.commit()
@@ -12,13 +14,28 @@ def add_author(author: AuthorCreate, session: Session):
     return db_author
 
 
-def get_authors(offset: int, limit: int, session: Session):
+def get_authors(offset: int, limit: int, session: Session) -> list[Author]:
     authors = session.exec(select(Author).offset(offset).limit(limit)).all()
     return authors
 
 
-def get_author(id: int, session: Session):
+def get_author(id: int, session: Session) -> Author:
     author = session.get(Author, id)
     if not author:
         raise HTTPException(status_code=404, detail="Author not found")
     return author
+
+
+def get_books_by_author(
+    id: int, offset: int, limit: int, session: Session
+) -> list[Book]:
+    books = session.exec(
+        select(Book)
+        .join(BookAuthorLink)
+        .join(Author)
+        .where(Author.id == id)
+        .order_by(Book.id)
+        .offset(offset)
+        .limit(limit)
+    ).all()
+    return books

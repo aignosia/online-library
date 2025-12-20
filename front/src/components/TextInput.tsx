@@ -1,11 +1,13 @@
+import type { ChangeEvent } from "react";
+
 interface TextInputProps {
   placeholder: string;
   type: string;
   name: string;
-  onChange(e: React.ChangeEventHandler<HTMLInputElement>): void;
+  onChange(e: ChangeEvent<HTMLInputElement>): void;
 }
 export default function TextInput(props: TextInputProps) {
-  const handleOnChange = (e) => {
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     props.onChange(e);
   };
   return (

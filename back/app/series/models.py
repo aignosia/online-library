@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from app.books.models import Book, BookRead
+    from app.books.models import Book
 
 
 class SerieBase(SQLModel):
@@ -22,7 +22,3 @@ class SerieCreate(SerieBase):
 
 class SerieRead(SerieBase):
     id: int
-
-
-class SerieReadWithBooks(SerieRead):
-    books: list["BookRead"] = []

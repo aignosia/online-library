@@ -12,11 +12,12 @@ interface HomePageProps {
 export default function HomePage(props: HomePageProps) {
   const bookCards = props.books.map((it) => {
     const authorsString = it.authors
-      .map((a) => `${a.firstname ?? ""} ${a.lastname ?? ""}`)
+      .map((a) => `${a.firstname ?? ""} ${a.lastname ?? ""}`.replace(",", ""))
       .join(", ");
     return (
       <BookCard
         key={`book${it.id}`}
+        id={it.id}
         title={it.title}
         author={authorsString}
         cover={it.cover}
@@ -35,7 +36,7 @@ export default function HomePage(props: HomePageProps) {
   return (
     <div className="h-screen flex flex-col bg-[#f8f5f1]">
       <Header />
-      <div className="flex-1 flex flex-col pt-6 px-[3vw] overflow-hidden">
+      <div className="flex-1 flex flex-col pt-6 px-[3vw] -ml-8 overflow-hidden">
         <div className="">
           <SearchBar />
         </div>
@@ -45,7 +46,7 @@ export default function HomePage(props: HomePageProps) {
               <p className="text-gray-600 pb-2 text-lg">Recommandations</p>
               <div className="w-full h-px mx-auto border border-gray-400"></div>
             </div>
-            <div className="px-8 pb-8 flex-1 overflow-y-auto scrollbar-hidden overflow-visible">
+            <div className="pb-8 px-8 flex-1 overflow-y-auto scrollbar-hidden overflow-visible">
               <div className="pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-10 overflow-visible">
                 {items.map((it) => it)}
               </div>

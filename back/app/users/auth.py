@@ -30,5 +30,5 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    user_public = UserRead.model_validate(user)
-    return Token(token=access_token, token_type="bearer", user=user_public)
+    user_read = UserRead.model_validate(user)
+    return Token(token=access_token, token_type="bearer", user=user_read)

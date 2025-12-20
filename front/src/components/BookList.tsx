@@ -8,11 +8,14 @@ interface BookListProps {
 export default function BookList(props: BookListProps) {
   const bookCards = props.books.map((it) => {
     const authorsString = it.authors
-      .map((a) => `${a.firstname || ""} ${a.lastname || ""}`)
+      .map((a) =>
+        `${a.firstname || ""} ${a.lastname || ""}`.replace(",", "").trim(),
+      )
       .join(", ");
     return (
       <BookCard
         key={`book${it.id}`}
+        id={it.id}
         title={it.title}
         author={authorsString}
         cover={it.cover}
@@ -29,7 +32,7 @@ export default function BookList(props: BookListProps) {
 
   const items = [...bookCards, ...placeholders];
   return (
-    <div className="flex flex-col flex-1 pb-8 px-8 overflow-y-auto scrollbar-hidden">
+    <div className="flex flex-col flex-1 pb-8 px-[20vw] overflow-y-auto">
       <div className="bg-[#f8f5f1] py-8">
         <h1 className="text-3xl font-bold">{props.title}</h1>
       </div>

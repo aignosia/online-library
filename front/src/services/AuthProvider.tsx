@@ -1,19 +1,6 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-
-interface AuthData {
-  token: string;
-  user: object | null;
-  loginAction(data: object): void;
-  logOut(): void;
-}
-
-const AuthContext = createContext<AuthData>({
-  token: "",
-  user: {},
-  loginAction: () => {},
-  logOut: () => {},
-});
+import { AuthContext } from "./AuthContext";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
@@ -32,7 +19,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       const res = await response.json();
       console.log(res);
-      if (res) {
+      if (response.ok) {
         setUser(res.user);
         setToken(res.token);
         localStorage.setItem("site", res.token);
@@ -58,4 +45,4 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export { AuthContext, AuthProvider };
+export { AuthProvider };

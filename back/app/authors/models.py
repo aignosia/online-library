@@ -31,8 +31,3 @@ class AuthorCreate(AuthorBase):
 
 class AuthorRead(AuthorBase):
     id: int
-
-
-class AuthorReadWithBooks(AuthorBase):
-    id: int
-    books: list["BookReadFromAuthor"] = []

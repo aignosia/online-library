@@ -6,7 +6,7 @@ from app.links.models import BookSubclassLink
 
 if TYPE_CHECKING:
     from app.bookclasses.models import BookClass, BookClassRead
-    from app.books.models import Book, BookRead
+    from app.books.models import Book
 
 
 class SubclassBase(SQLModel):
@@ -30,10 +30,6 @@ class SubclassCreate(SubclassBase):
 
 class SubclassRead(SubclassBase):
     id: int
-
-
-class SubclassReadWithBooks(SubclassRead):
-    books: list["BookRead"] = []
 
 
 class SubclassReadWithBookClass(SubclassRead):
