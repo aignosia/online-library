@@ -1,0 +1,10 @@
+[project]
+name = "back"
+version = "0.1.0"
+description = "Online Library API"
+readme = ""
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.ty.environment]
+root = [".", "./app"]

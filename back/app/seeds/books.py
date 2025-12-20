@@ -4,7 +4,7 @@ from typing import Any
 from pymarc import Field, Record, map_xml
 from sqlmodel import Session
 
-import app.model_registry  # noqa: F401
+from app import model_registry  # noqa: F401
 from app.authors.models import Author
 from app.bookclasses.models import BookClass
 from app.books.models import Book

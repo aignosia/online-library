@@ -1,6 +1,4 @@
-from typing import Annotated
-
-from fastapi import HTTPException, Query
+from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from app.books.models import Book, BookCreate

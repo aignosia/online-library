@@ -7,7 +7,7 @@ from app.links.models import BookSubclassLink
 from app.subclasses.models import Subclass
 
 
-def add_class(book_class: BookClassCreate, session: Session) -> BookClass:
+def add_class(book_class: BookClassCreate, session: Session):
     db_class = BookClass.model_validate(book_class)
     session.add(db_class)
     session.commit()
@@ -15,35 +15,31 @@ def add_class(book_class: BookClassCreate, session: Session) -> BookClass:
     return db_class
 
 
-def get_classes(
-    offset: int | None, limit: int | None, session: Session
-) -> list[BookClass]:
+def get_classes(offset: int | None, limit: int | None, session: Session):
     if not limit:
-        bookclasses = session.exec(
-            select(BookClass).offset(offset).limit(limit)
-        ).all()
+        bookclasses = list(
+            session.exec(select(BookClass).offset(offset).limit(limit)).all()
+        )
     else:
-        bookclasses = session.exec(select(BookClass)).all()
+        bookclasses = list(session.exec(select(BookClass)).all())
     return bookclasses
 
 
-def get_class(id: int, session: Session) -> BookClass:
+def get_class(id: int, session: Session):
     book_class = session.get(BookClass, id)
     if not book_class:
         raise HTTPException(status_code=404, detail="Class not found")
     return book_class
 
 
-def get_books_by_class(
-    id: int, offset: int, limit: int, session: Session
-) -> list[Book]:
+def get_books_by_class(id: int, offset: int, limit: int, session: Session):
     books = session.exec(
         select(Book)
         .join(BookSubclassLink)
         .join(Subclass)
         .join(BookClass)
         .where(BookClass.id == id)
-        .order_by(Book.id)
+        .order_by(Book.id)  # ty:ignore[invalid-argument-type]
         .offset(offset)
         .limit(limit)
     ).all()

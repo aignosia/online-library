@@ -27,7 +27,7 @@ def get_password_hash(password):
     return password_hash.hash(password)
 
 
-def add_user(user_in: UserCreate, session: Session) -> User:
+def add_user(user_in: UserCreate, session: Session):
     db_user = User.model_validate(
         user_in, update={"hashed_password": get_password_hash(user_in.password)}
     )
