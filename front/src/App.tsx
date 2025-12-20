@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -7,6 +7,7 @@ import BookListingPage from "./pages/BookListingPage";
 import { AuthProvider } from "./services/AuthProvider";
 import { apiClient } from "./services/api";
 import { useEffect, useState } from "react";
+import BookInfoPage from "./pages/BookInfoPage";
 
 export interface Author {
   id: number;
@@ -61,6 +62,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<Navigate to="/home" replace />}></Route>
           <Route
             path="/home"
             element={<HomePage categories={categories} books={books} />}
@@ -78,9 +80,11 @@ function App() {
             }
           />
           <Route
-            path="/category/:id"
-            element={<BookListingPage title="" />}
+            path="/main-category/:id"
+            element={<BookListingPage />}
           ></Route>
+          <Route path="/category/:id" element={<BookListingPage />}></Route>
+          <Route path="/book/:id" element={<BookInfoPage />}></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

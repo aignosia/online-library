@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from sqlmodel import Session, select
 
+from app.books.models import Book
 from app.publishers.models import Publisher, PublisherCreate
 
 
@@ -19,8 +20,22 @@ def get_publishers(offset: int, limit: int, session: Session):
     return publishers
 
 
-def get_publisher(publisher_id: int, session: Session):
-    publisher = session.get(Publisher, publisher_id)
+def get_publisher(id: int, session: Session):
+    publisher = session.get(Publisher, id)
     if not publisher:
         raise HTTPException(status_code=404, detail="Publisher not found")
     return publisher
+
+
+def get_books_by_publisher(
+    id: int, offset: int, limit: int, session: Session
+) -> list[Book]:
+    books = session.exec(
+        select(Book)
+        .join(Publisher)
+        .where(Publisher.id == id)
+        .order_by(Book.id)
+        .offset(offset)
+        .limit(limit)
+    ).all()
+    return books

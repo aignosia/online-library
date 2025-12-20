@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import type { Categorie } from "../App";
 import CatCard from "./CatCard";
 
@@ -10,12 +11,17 @@ export default function CatListCard(props: CatListProps) {
     <div className="min-h-[50px] mt-7 py-6 px-4 mb-8 bg-white shadow-lg rounded-xl">
       <div className="h-full overflow-hidden overflow-y-auto scrollbar-hidden">
         <ul className="">
-          {props.categories.map((it) => {
+          {props.categories.map((cat) => {
             return (
-              <li>
-                <a href="/">
-                  <CatCard key={`cat${it.id}`} content={it.name} />
-                </a>
+              <li key={`cat${cat.id}`}>
+                <Link
+                  to={{
+                    pathname: `/main-category/${cat.id}`,
+                    search: `?name=${encodeURIComponent(cat.name)}&route=${encodeURIComponent(`classes/${cat.id}/books?offset=0&limit=50`)}`,
+                  }}
+                >
+                  <CatCard content={cat.name} />
+                </Link>
               </li>
             );
           })}

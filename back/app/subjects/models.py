@@ -5,7 +5,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from app.links.models import BookSubjectLink
 
 if TYPE_CHECKING:
-    from app.books.models import Book, BookRead
+    from app.books.models import Book
 
 
 class SubjectBase(SQLModel):
@@ -26,7 +26,3 @@ class SubjectCreate(SubjectBase):
 
 class SubjectRead(SubjectBase):
     id: int
-
-
-class SubjectReadWithBooks(SubjectRead):
-    books: list["BookRead"] = []

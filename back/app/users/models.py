@@ -7,7 +7,7 @@ from sqlmodel.main import Relationship
 from app.links.models import UserBookDownload
 
 if TYPE_CHECKING:
-    from app.books.models import Book, BookRead
+    from app.books.models import Book
 
 
 class UserBase(SQLModel):
@@ -30,10 +30,6 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     pass
-
-
-class UserReadWithBooks(UserRead):
-    books: list["BookRead"] = []
 
 
 class Token(BaseModel):

@@ -1,5 +1,7 @@
 from sqlmodel import Session, select
 
+from app.books.models import Book
+from app.links.models import BookSubjectLink
 from app.subjects.models import Subject, SubjectCreate
 
 
@@ -21,3 +23,15 @@ def get_subject(id: int, session: Session):
     if not subject:
         raise Exception(status_code=404, details="Subject not found")
     return subject
+
+
+def get_books_by_subject(id: int, offset: int, limit: int, session: Session):
+    books = session.exec(
+        select(Book)
+        .join(BookSubjectLink)
+        .join(Subject)
+        .where(Subject.id == id)
+        .offset(offset)
+        .limit(limit)
+    ).all()
+    return books
