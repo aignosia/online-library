@@ -24,7 +24,7 @@ def get_subclasses(offset: int | None, limit: int | None, session: Session):
 def get_subclass(id: int, session: Session):
     subclass = session.get(Subclass, id)
     if not subclass:
-        raise HTTPException(status_code=404, defail="Subclass not found")
+        raise HTTPException(status_code=404, detail="Subclass not found")
     return subclass
 
 

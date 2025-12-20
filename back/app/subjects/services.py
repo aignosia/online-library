@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from app.books.models import Book
@@ -21,7 +22,7 @@ def get_subjects(offset: int, limit: int, session: Session):
 def get_subject(id: int, session: Session):
     subject = session.get(Subject, id)
     if not subject:
-        raise Exception(status_code=404, details="Subject not found")
+        raise HTTPException(status_code=404, detail="Subject not found")
     return subject
 
 

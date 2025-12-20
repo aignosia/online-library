@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship, SQLModel
 
-from app.books.models import BookReadFromAuthor
 from app.links.models import BookAuthorLink
 
 if TYPE_CHECKING:

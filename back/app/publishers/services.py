@@ -27,14 +27,12 @@ def get_publisher(id: int, session: Session):
     return publisher
 
 
-def get_books_by_publisher(
-    id: int, offset: int, limit: int, session: Session
-) -> list[Book]:
+def get_books_by_publisher(id: int, offset: int, limit: int, session: Session):
     books = session.exec(
         select(Book)
         .join(Publisher)
         .where(Publisher.id == id)
-        .order_by(Book.id)
+        .order_by(Book.id)  # ty:ignore[invalid-argument-type]
         .offset(offset)
         .limit(limit)
     ).all()
