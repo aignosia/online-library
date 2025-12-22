@@ -12,16 +12,18 @@ interface BookListingProps {
 export default function BookListingPage(props: BookListingProps) {
   const [searchParams] = useSearchParams();
   const title = props.title || searchParams.get("name") || "";
-  const route = props.route || searchParams.get("route") || "books";
+  const route = props.route || searchParams.get("route");
 
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await apiClient.request(route, {
-        method: "GET",
-      });
-      setBooks(data);
+      if (route) {
+        const data = await apiClient.request(route, {
+          method: "GET",
+        });
+        setBooks(data);
+      }
     };
     fetchData();
   }, [route]);
