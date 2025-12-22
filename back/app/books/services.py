@@ -79,4 +79,4 @@ def get_search_autocomplete(q: str, session: Session):
         ).all()
     )
 
-    return results[:10]
+    return list(dict.fromkeys(results[:10]))

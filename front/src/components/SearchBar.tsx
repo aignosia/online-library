@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useState,
-  type KeyboardEventHandler,
-  type MouseEventHandler,
-} from "react";
+import { useEffect, useState } from "react";
 import { apiClient } from "../services/api";
 import { useNavigate } from "react-router";
 
