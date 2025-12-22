@@ -85,6 +85,7 @@ function App() {
           ></Route>
           <Route path="/category/:id" element={<BookListingPage />}></Route>
           <Route path="/book/:id" element={<BookInfoPage />}></Route>
+          <Route path="/search" element={<BookListingPage />}></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

@@ -71,7 +71,7 @@ def get_search_autocomplete(q: str, session: Session):
             select(Book.title).where(book_tsvector.op("@@")(ts_query))
         ).all()
     ) + list(
-        " ".join(it)
+        " ".join(e for e in it if e is not None)
         for it in session.exec(
             select(Author.firstname, Author.lastname).where(
                 author_tsvector.op("@@")(ts_query)
