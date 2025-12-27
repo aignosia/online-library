@@ -1,0 +1,43 @@
+# --- DATA ---
+# Ignore data files as they are often too large for GitHub
+data/
+# Exception: Keep .gitkeep files to preserve folder structure
+!data/**/.gitkeep
+
+# --- MODELS AND WEIGHTS ---
+# Do not version heavy models (use LFS or Cloud storage instead)
+*.pkl
+*.h5
+*.joblib
+*.onnx
+models/
+!models/.gitkeep
+
+# --- PYTHON ---
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# --- JUPYTER NOTEBOOKS ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+# Ignore autosave temporary files
+.virtual_documents/
+
+# --- SYSTEM ---
+.DS_Store
+Thumbs.db
+
+# --- LOGS AND REPORTS ---
+logs/
+*.log
+reports/figures/*
+!reports/figures/.gitkeep

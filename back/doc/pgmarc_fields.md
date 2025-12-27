@@ -33,7 +33,8 @@ file, mapped with their descriptions from the [www.loc.gov](www.loc.gov) website
 
 [] 250: Edition Statement (R)
 
-[x] 264: Production, Publication, Distribution, Manufacture, and Copyright Notice (R)
+[x] 264: Production, Publication, Distribution, Manufacture, and Copyright
+Notice (R)
 
 [] 300: Physical Description (R)
 
@@ -59,7 +60,7 @@ file, mapped with their descriptions from the [www.loc.gov](www.loc.gov) website
 
 [x] 653: Index Term - Uncontrolled (R)
 
-[] 700: Added Entry - Personal Name (R)
+[x] 700: Added Entry - Personal Name (R)
 
 [] 830: Series Added Entry - Uniform Title (R)
 

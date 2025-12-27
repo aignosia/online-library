@@ -93,8 +93,10 @@ export default function BookInfoPage() {
                 onClick={() => {}}
               />
             </div>
-            <p className="pt-10">
-              <span className="font-bold">Résumé :</span> {book?.summary}
+            <p className="pt-10 whitespace-pre-wrap">
+              <span className="font-bold">Résumé :</span>
+              <br />
+              {book?.summary}
             </p>
             {book?.serie ? <p>Serie: {book?.serie?.name}</p> : <></>}
             <p>
@@ -113,8 +115,10 @@ export default function BookInfoPage() {
               {book?.subjects.map((s) => s.name).join(", ") || "N/a"}
             </p>
             {book?.notes && (
-              <p>
-                <span className="font-bold">Notes :</span> {book?.notes}
+              <p className="whitespace-pre-wrap">
+                <span className="font-bold">Notes :</span>
+                <br />
+                {book?.notes}
               </p>
             )}
           </div>
