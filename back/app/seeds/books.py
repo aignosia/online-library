@@ -1,4 +1,5 @@
 import json
+import re
 from typing import Any
 
 from pymarc import Field, Record, map_xml
@@ -47,13 +48,27 @@ def get_book_authors(record: Record) -> list[Author]:
     for author in authors_fields:
         name_sf = author.get_subfields("a")
         name = name_sf[0].split(", ") if len(name_sf) > 0 else []
-        lastname = name[0] if len(name) > 0 else None
-        firstname = name[1] if len(name) > 1 else None
+        lastname = (
+            re.sub(r"[^a-zA-ZÀ-ÿ\s\-]", "", name[0]) if len(name) > 0 else None
+        )
+        firstname = (
+            re.sub(r"[^a-zA-ZÀ-ÿ\s\-]", "", name[1]) if len(name) > 1 else None
+        )
 
         lifespan_sf = author.get_subfields("d")
         lifespan = lifespan_sf[0].split("-") if len(lifespan_sf) > 0 else []
         birth_year = lifespan[0] if len(lifespan) > 0 else None
         death_year = lifespan[1] if len(lifespan) > 1 else None
+        fuller_name_sf = author.get_subfields("q")
+        fuller_name = (
+            re.sub(
+                r"[^a-zA-ZÀ-ÿ\s\-]",
+                "",
+                fuller_name_sf[0],
+            )
+            if fuller_name_sf
+            else None
+        )
 
         if not firstname and not lastname:
             continue
@@ -65,6 +80,7 @@ def get_book_authors(record: Record) -> list[Author]:
                 lastname=lastname,
                 birth_year=birth_year,
                 death_year=death_year,
+                fuller_name=fuller_name,
             )
         if cache.authors[key_name] not in authors:
             authors.append(cache.authors[key_name])
@@ -73,7 +89,7 @@ def get_book_authors(record: Record) -> list[Author]:
 
 
 def get_book_publisher(record: Record) -> Publisher | None:
-    publisher_name = record.publisher
+    publisher_name = re.sub(r"[^a-zA-ZÀ-ÿ\s\-]", "", record.publisher)
     if not publisher_name:
         return None
 
@@ -155,9 +171,19 @@ def insert_book_in_db(record: Record):
     title = record.title
     pub_year = record.pubyear
     isbn = record.isbn
-    summary = "\n\n".join(get_fields_value(record.get_fields("520")))
-    notes = "\n\n".join(get_fields_value(record.notes))
-    language_code = ",".join(get_fields_value(record.get_fields("546")))
+    summary = "\n".join(get_fields_value(record.get_fields("520")))
+    notes = "\n".join(
+        get_fields_value(
+            record.get_fields(
+                "500",
+                "505",
+                "508",
+                "534",
+                "546",
+            )
+        )
+    )
+    language_code = ",".join(get_fields_value(record.get_fields("041")))
     language_code = language_code if language_code else None
     subclasses_code = get_fields_value(record.get_fields("050"))
     locations_url = next(iter(get_fields_value(record.get_fields("856"))))
@@ -195,9 +221,9 @@ def insert_book_in_db(record: Record):
 def seed_database():
     print("Seeding start")
     map_xml(insert_book_in_db, "downloads/pgmarc.xml")
-    print("Adding data")
+    print("Adding entries...")
     session.add_all(cache.books.values())
-    print("Commiting data")
+    print("Commiting entries...")
     session.commit()
 
     print("Seeding complete")

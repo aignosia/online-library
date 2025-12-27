@@ -12,6 +12,7 @@ from app.subclasses.models import (
     SubclassReadWithBookClass,
 )
 from app.subjects.models import SubjectRead
+from app.users.models import User  # noqa: F401
 
 FileReadWithBook.model_rebuild()
 BookClassReadWithSubclasses.model_rebuild()
