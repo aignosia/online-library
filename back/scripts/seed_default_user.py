@@ -6,6 +6,10 @@ from app.users.services import add_user
 
 
 def seed_default_user():
+    """
+    Add a default user to the database so that testing does not
+    require creating a new account.
+    """
     init_db()
     session = Session(engine)
     default_user = UserCreate(
@@ -13,6 +17,11 @@ def seed_default_user():
         password="secret123",
         full_name="John Doe",
     )
+    print("""Default user credentials:
+        username: johndoe
+        password: secret123
+        full_name: John Doe""")
+
     if not session.get(User, default_user.username):
         add_user(default_user, session)
 
