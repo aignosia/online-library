@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { apiClient } from "../services/api";
 import type { Author } from "../App";
 import Header from "../components/Header";
-import cover from "../assets/book-cover.jpg";
+import cover from "../assets/default-book-cover.png";
 import DownloadButton from "../components/DownloadButton";
 
 interface Publisher {
