@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import cover from "../assets/book-cover.jpg";
+import cover from "../assets/default-book-cover.png";
 
 interface BookCardProps {
   id: number;

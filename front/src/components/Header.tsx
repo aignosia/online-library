@@ -3,6 +3,7 @@ import Button from "./Button";
 import { useNavigate } from "react-router";
 import { useContext, useState } from "react";
 import { AuthContext } from "../services/AuthContext";
+import logo from "/logo.png";
 
 export default function Header() {
   const auth = useContext(AuthContext);
@@ -20,8 +21,8 @@ export default function Header() {
   return (
     <header className="w-full">
       <nav className="px-[3vw] h-17 py-4 w-full flex justify-between items-center bg-white">
-        <div className="text-2xl text-gray-700 font-bold flex">
-          {/*<img src={logo} alt="Logo" className="w-7" />*/}
+        <div className="text-2xl text-gray-700 font-bold flex items-center gap-2">
+          <img src={logo} alt="Logo" className="h-7" />
           <Link to="/home">
             <p>
               <span className="text-[#f4b759]">Online</span>{" "}
