@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import JSON, Column, Field, Relationship, SQLModel
 
 from app.links.models import (
     BookAuthorLink,
@@ -25,7 +25,7 @@ class BookBase(SQLModel):
     pub_year: int
     summary: str
     isbn: str | None = None
-    notes: str | None = None
+    notes: list[str] = Field(default=[], sa_column=Column(JSON))
     language_code: str | None = None
     cover: str | None = None
 

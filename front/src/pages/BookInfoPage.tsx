@@ -4,7 +4,7 @@ import { apiClient } from "../services/api";
 import type { Author } from "../App";
 import Header from "../components/Header";
 import cover from "../assets/book-cover.jpg";
-import Button from "../components/Button";
+import DownloadButton from "../components/DownloadButton";
 
 interface Publisher {
   id: number;
@@ -32,19 +32,27 @@ interface Subclass {
   bookclass: BookClass | null;
 }
 
+export interface BookFile {
+  id: number;
+  label: string;
+  type: string;
+  book_id: string;
+  location: string;
+}
+
 interface BookFull {
   title: string;
   pub_year: number;
   summary: string;
   isbn: string | null;
-  notes: string | null;
+  notes: Array<string> | null;
   language_code: string | null;
   cover: string | null;
   publisher: Publisher | null;
   serie: Serie | null;
   authors: Array<Author>;
   subjects: Array<Subject>;
-  files: Array<object>;
+  files: Array<BookFile>;
   subclasses: Array<Subclass>;
 }
 
@@ -86,18 +94,16 @@ export default function BookInfoPage() {
               ].join(", ")}
             </p>
             <div className="pt-3">
-              <Button
+              <DownloadButton
                 color="#f4b759"
                 hoverColor="#f2a73e"
-                content="Télécharger"
-                onClick={() => {}}
+                options={book?.files}
               />
             </div>
-            <p className="pt-10 whitespace-pre-wrap">
+            <div className="pt-10 flex flex-col gap-2">
               <span className="font-bold">Résumé :</span>
-              <br />
-              {book?.summary}
-            </p>
+              <p className="whitespace-pre-wrap">{book?.summary}</p>
+            </div>
             {book?.serie ? <p>Serie: {book?.serie?.name}</p> : <></>}
             <p>
               <span className="font-bold">Catégorie(s) :</span>{" "}
@@ -115,11 +121,14 @@ export default function BookInfoPage() {
               {book?.subjects.map((s) => s.name).join(", ") || "N/a"}
             </p>
             {book?.notes && (
-              <p className="whitespace-pre-wrap">
+              <div className="flex flex-col gap-2">
                 <span className="font-bold">Notes :</span>
-                <br />
-                {book?.notes}
-              </p>
+                <ul className="list-disc list-outside">
+                  {book?.notes.map((note, index) => (
+                    <li key={index}>{note}</li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
         </div>
