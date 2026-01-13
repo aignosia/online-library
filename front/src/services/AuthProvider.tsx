@@ -21,8 +21,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(res);
       if (response.ok) {
         setUser(res.user);
-        setToken(res.token);
-        localStorage.setItem("site", res.token);
+        setToken(res.access_token);
+        localStorage.setItem("site", res.access_token);
         navigate("/home");
         return;
       }
