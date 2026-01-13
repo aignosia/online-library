@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+html {
+    margin: 0;
+    padding: 0;
+    font-family: "Source Sans 3", sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    margin: 0;
+    padding: 0;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hidden {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
