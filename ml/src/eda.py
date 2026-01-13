@@ -206,7 +206,7 @@ cols = ["subjects", "classes"]
 df_corr = df[cols].explode("subjects")
 df_corr = df_corr.explode("classes").dropna().head(10000)
 
-corr_matrix = pd.DataFrame(index=cols, columns=cols)
+corr_matrix = pd.DataFrame(index=cols, columns=cols)  # ty:ignore[invalid-argument-type]
 
 for col1 in cols:
     for col2 in cols:

@@ -1,5 +1,6 @@
 import json
 import re
+from pathlib import Path
 from typing import Any
 
 from pymarc import Field, Record, map_xml
@@ -21,7 +22,16 @@ session = Session(engine)
 
 
 class Cache:
+    """
+    Temporary caching system to store entities created during the process.
+
+    Allows reusing existing instances of authors, publishers, etc., to avoid
+    unique constraint violations and reduce redundant queries before the
+    final commit.
+    """
+
     def __init__(self):
+        """Initialize cache dictionaries for each entity type."""
         self.books: dict[str, Book] = {}
         self.authors: dict[str, Author] = {}
         self.publishers: dict[str, Publisher] = {}
@@ -39,10 +49,31 @@ with open("app/seeds/loc_classification.json", "r") as f:
 
 
 def get_fields_value(fields_list: list[Field]) -> list[str]:
+    """
+    Extracts the raw text value from a list of MARC fields.
+
+    Args:
+        fields_list: List of pymarc Field objects.
+
+    Returns:
+        A list of strings representing the field values.
+    """
     return list(map(lambda x: x.value(), fields_list))
 
 
 def get_book_authors(record: Record) -> list[Author]:
+    """
+    Extracts and processes authors from a MARC record.
+
+    Parses tags 100, 110, 111, and 700 to extract name, first name,
+    lifespans, and fuller name. Also handles entity caching.
+
+    Args:
+        record: The MARC Record object to analyze.
+
+    Returns:
+        A list of Author objects.
+    """
     authors_fields = record.get_fields("100", "110", "111", "700")
     authors = []
     for author in authors_fields:
@@ -89,6 +120,15 @@ def get_book_authors(record: Record) -> list[Author]:
 
 
 def get_book_publisher(record: Record) -> Publisher | None:
+    """
+    Extracts the publisher from a MARC record.
+
+    Args:
+        record: The MARC record.
+
+    Returns:
+        A Publisher object or None if no information is found.
+    """
     publisher_name = re.sub(r"[^a-zA-ZÀ-ÿ\s\-]", "", record.publisher)
     if not publisher_name:
         return None
@@ -100,6 +140,15 @@ def get_book_publisher(record: Record) -> Publisher | None:
 
 
 def get_book_subjects(record: Record) -> list[Subject]:
+    """
+    Extracts subjects (keywords) from a MARC record via tag 653.
+
+    Args:
+        record: The MARC record.
+
+    Returns:
+        A list of Subject objects.
+    """
     subject_names = get_fields_value(record.get_fields("653"))
     subjects = []
     for subject_name in subject_names:
@@ -112,6 +161,15 @@ def get_book_subjects(record: Record) -> list[Subject]:
 
 
 def get_book_serie(record: Record) -> Serie | None:
+    """
+    Extracts the collection/series from a MARC record via tag 490.
+
+    Args:
+        record: The MARC record.
+
+    Returns:
+        A Serie object or None.
+    """
     serie_field = next(iter(record.get_fields("490")), None)
     if not serie_field:
         return None
@@ -124,6 +182,16 @@ def get_book_serie(record: Record) -> Serie | None:
 
 
 def get_book_subclasses(codes: list[str], mapping: Any) -> list[Subclass]:
+    """
+    Maps classification codes (LOC) to Subclass objects.
+
+    Args:
+        codes: List of extracted classification codes (tag 050).
+        mapping: Mapping dictionary loaded from JSON.
+
+    Returns:
+        A list of Subclass objects associated with their respective BookClass.
+    """
     subclasses = []
     for code in codes:
         bookclass_mapping = next(
@@ -152,6 +220,17 @@ def get_book_subclasses(codes: list[str], mapping: Any) -> list[Subclass]:
 
 
 def get_book_files_locations(url: str) -> list[File]:
+    """
+    Generates the list of available files (EPUB, Kindle, TXT) for a book.
+
+    Based on Project Gutenberg's standard storage structure.
+
+    Args:
+        url: The base resource URL.
+
+    Returns:
+        A list of File objects with their types and locations.
+    """
     id = next(iter(url.rsplit("/")))
     locations = [
         File(type="epub3_images", location=f"{url}.epub3.images"),
@@ -166,6 +245,16 @@ def get_book_files_locations(url: str) -> list[File]:
 
 
 def insert_book_in_db(record: Record):
+    """
+    Transforms a MARC record into a Book object and adds it to the cache.
+
+    This function is called by `map_xml` for each record found.
+    It extracts title, ISBN, summary, notes, language, and calls
+    auxiliary extraction functions.
+
+    Args:
+        record: The MARC record being processed.
+    """
     id = record.get_fields("001")[0].value()
 
     title = record.title
@@ -218,9 +307,15 @@ def insert_book_in_db(record: Record):
     print(f"Processed book: {id}")
 
 
-def seed_database():
+def seed_books(file_path: Path):
+    """
+    Main entry point for database seeding.
+
+    Reads the XML file, processes records, adds objects to the session,
+    and performs the final commit.
+    """
     print("Seeding start")
-    map_xml(insert_book_in_db, "downloads/pgmarc.xml")
+    map_xml(insert_book_in_db, file_path)
     print("Adding entries...")
     session.add_all(cache.books.values())
     print("Commiting entries...")
@@ -230,4 +325,4 @@ def seed_database():
 
 
 if __name__ == "__main__":
-    seed_database()
+    seed_books(Path("downloads/pgmarcxml"))
