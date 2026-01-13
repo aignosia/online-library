@@ -37,18 +37,23 @@ def run(
     ),
 ):
     "Run database seed according to the resource selected"
+    typer.echo("Starting seeding 🚀")
     if resource == "user":
-        seed_default_user()
+        run_seed_default_user()
     elif resource == "books":
-        seed_books(Path(file if file else "downloads/pgmarc.xml"))
+        if not file:
+            raise FileNotFoundError("Enter a valid file path.")
+        run_seed_books(Path(file))
     elif resource == "all":
-        seed_default_user()
-        seed_books(Path(file if file else "downloads/pgmarc.xml"))
+        if not file:
+            raise FileNotFoundError("Enter a valid file path.")
+        run_seed_default_user()
+        run_seed_books(Path(file))
     else:
         typer.echo(f"Error: uknown resource '{resource}'.", err=True)
         raise typer.Exit(code=1)
 
-    typer.echo("Seeding finished successfully!")
+    typer.echo("Seeding finished successfully! 🎉")
 
 
 if __name__ == "__main__":

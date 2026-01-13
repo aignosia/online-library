@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 class FileBase(SQLModel):
     type: str
+    label: str
     location: str
 
     book_id: int | None = Field(default=None, foreign_key="book.id")

@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 from typing import Any
 
+import typer
 from pymarc import Field, Record, map_xml
 from sqlmodel import Session
 
@@ -44,7 +45,7 @@ class Cache:
 cache = Cache()
 
 
-with open("app/seeds/loc_classification.json", "r") as f:
+with open("scripts/loc_classification.json", "r") as f:
     class_mapping = json.load(f)
 
 
@@ -219,7 +220,7 @@ def get_book_subclasses(codes: list[str], mapping: Any) -> list[Subclass]:
     return subclasses
 
 
-def get_book_files_locations(url: str) -> list[File]:
+def get_book_files_locations(url: str, book_id: int) -> list[File]:
     """
     Generates the list of available files (EPUB, Kindle, TXT) for a book.
 
@@ -231,15 +232,51 @@ def get_book_files_locations(url: str) -> list[File]:
     Returns:
         A list of File objects with their types and locations.
     """
-    id = next(iter(url.rsplit("/")))
+    root_url = f"{url}/{book_id}/pg{book_id}"
+    file_types = {
+        "epub3_images": {
+            "type": "epub3_images",
+            "label": "EPUB3 (E-readers incl. Send-to-Kindle)",
+            "url_ext": "-images-3.epub",
+        },
+        "epub_images": {
+            "type": "epub_images",
+            "label": "EPUB3 (E-readers Incl. Send-to-Kindle)",
+            "url_ext": "-images.epub",
+        },
+        "epub_noimages": {
+            "type": "epub_noimages",
+            "label": "EPUB (No Images, Older E-readers)",
+            "url_ext": ".epub",
+        },
+        "kindle": {
+            "type": "kindle",
+            "label": "Kindle",
+            "url_ext": "-images-kf8.mobi",
+        },
+        "kindle_legacy": {
+            "type": "kindle_legacy",
+            "label": "Older Kindles",
+            "url_ext": "-images.mobi",
+        },
+        "txt_utf8": {
+            "type": "txt_utf8",
+            "label": "Plain Text UTF-8",
+            "url_ext": ".txt",
+        },
+        "html_zip": {
+            "type": "html_zip",
+            "label": "HTML (Zip)",
+            "url_ext": "-h.zip",
+        },
+    }
     locations = [
-        File(type="epub3_images", location=f"{url}.epub3.images"),
-        File(type="epub_images", location=f"{url}.epub.images"),
-        File(type="epub_noimages", location=f"{url}.epub.noimages"),
-        File(type="kindle", location=f"{url}.kf8.images"),
-        File(type="kindle_legacy", location=f"{url}.kindle.images"),
-        File(type="txt_utf8", location=f"{url}.txt.utf8"),
-        File(type="html_zip", location=f"{url}/pg{id}-h.zip"),
+        File(
+            type=file_types[file_type]["type"],
+            label=file_types[file_type]["label"],
+            location=f"{root_url}{file_types[file_type]['url_ext']}",
+        )
+        for file_type in file_types.keys()
     ]
     return locations
 
@@ -261,28 +298,26 @@ def insert_book_in_db(record: Record):
     pub_year = record.pubyear
     isbn = record.isbn
     summary = "\n".join(get_fields_value(record.get_fields("520")))
-    notes = "\n".join(
-        get_fields_value(
-            record.get_fields(
-                "500",
-                "505",
-                "508",
-                "534",
-                "546",
-            )
+    notes = get_fields_value(
+        record.get_fields(
+            "500",
+            "505",
+            "508",
+            "534",
+            "546",
         )
     )
     language_code = ",".join(get_fields_value(record.get_fields("041")))
     language_code = language_code if language_code else None
     subclasses_code = get_fields_value(record.get_fields("050"))
-    locations_url = next(iter(get_fields_value(record.get_fields("856"))))
+    location_url = "https://www.gutenberg.org/cache/epub"
     cover = f"https://www.gutenberg.org/cache/epub/{id}/pg{id}.cover.medium.jpg"
 
     authors = get_book_authors(record)
     publisher = get_book_publisher(record)
     subjects = get_book_subjects(record)
     serie = get_book_serie(record)
-    locations = get_book_files_locations(locations_url)
+    locations = get_book_files_locations(location_url, id)
     subclasses = get_book_subclasses(subclasses_code, class_mapping)
 
     book = Book(
@@ -304,7 +339,7 @@ def insert_book_in_db(record: Record):
 
     cache.books[id] = book
 
-    print(f"Processed book: {id}")
+    typer.echo(f"Processed books: {len(cache.books)}\r", nl=False)
 
 
 def seed_books(file_path: Path):
@@ -314,14 +349,16 @@ def seed_books(file_path: Path):
     Reads the XML file, processes records, adds objects to the session,
     and performs the final commit.
     """
-    print("Seeding start")
-    map_xml(insert_book_in_db, file_path)
-    print("Adding entries...")
-    session.add_all(cache.books.values())
-    print("Commiting entries...")
-    session.commit()
+    if session.get(Book, 1):
+        typer.echo("Book seeding skipped: book table not empty")
+        return
 
-    print("Seeding complete")
+    map_xml(insert_book_in_db, file_path)
+    typer.echo(f"Processed books: {len(cache.books)}")
+    typer.echo("Adding entries...")
+    session.add_all(cache.books.values())
+    typer.echo("Commiting entries...")
+    session.commit()
 
 
 if __name__ == "__main__":
