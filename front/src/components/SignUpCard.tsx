@@ -76,6 +76,7 @@ export default function SignUpCard() {
           auth.loginAction(new URLSearchParams(authData));
         } else if (response.status == 422) {
           console.log(res);
+          setErrors((prev) => ({ ...prev, auth: true }));
         }
       };
       signupAction();
@@ -95,6 +96,7 @@ export default function SignUpCard() {
           placeholder="Enter Your Name"
           type="text"
           name="full_name"
+          autoComplete="name"
           onChange={handleInput}
         />
         <div className="h-6"></div>
@@ -102,6 +104,7 @@ export default function SignUpCard() {
           placeholder="Enter Username"
           type="text"
           name="username"
+          autoComplete="username"
           onChange={handleInput}
         />
         <div className="h-6"></div>
@@ -109,6 +112,7 @@ export default function SignUpCard() {
           placeholder="Enter Password"
           type="password"
           name="password"
+          autoComplete="new-password"
           onChange={handleInput}
         />
         <div className="h-6"></div>
@@ -121,6 +125,7 @@ export default function SignUpCard() {
           placeholder="Confirm Password"
           type="password"
           name="confirm"
+          autoComplete="new-password"
           onChange={handleInput}
         />
         {errors.confirm && (
@@ -130,7 +135,7 @@ export default function SignUpCard() {
         )}
         <div className="h-12"></div>
 
-        {errors && (
+        {errors.auth && (
           <p className="text-red-500 -mt-5 mb-5">
             Saisissez des informations valides.
           </p>

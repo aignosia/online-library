@@ -36,7 +36,7 @@ export default function LoginCard() {
   };
 
   return (
-    <div className="bg-white shadow-xl rounded-3xl p-10 w-[450px]">
+    <div className="flex flex-col bg-white shadow-xl rounded-3xl p-10 w-[450px]">
       <h2 className="text-2xl font-semibold text-center mb-10">Connexion</h2>
 
       <form className="flex flex-col" onSubmit={handleSubmit}>
@@ -44,6 +44,7 @@ export default function LoginCard() {
           placeholder="Enter Username"
           type="text"
           name="username"
+          autoComplete="username"
           onChange={handleInput}
         />
         <div className="h-10"></div>
@@ -51,6 +52,7 @@ export default function LoginCard() {
           placeholder="Enter Password"
           name="password"
           type="password"
+          autoComplete="current-password"
           onChange={handleInput}
         />
 
