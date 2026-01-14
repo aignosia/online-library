@@ -70,7 +70,6 @@ export default function SignUpCard() {
           },
           body: JSON.stringify(input),
         });
-        const res = await response.json();
         if (response.ok) {
           auth.loginAction(new URLSearchParams(authData));
         } else if (response.status == 422) {
