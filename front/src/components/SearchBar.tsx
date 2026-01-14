@@ -29,7 +29,6 @@ export default function SearchBar() {
   }, [query]);
 
   const handleSearchAction = (value: string) => {
-    console.log("Search : ", value);
     navigate(
       `/search?name=${encodeURIComponent(`Recherche : ${value}`)}&route=${encodeURIComponent(`books/search?q=${value}`)}`,
     );

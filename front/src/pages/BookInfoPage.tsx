@@ -69,16 +69,22 @@ export default function BookInfoPage() {
     fetchData();
   }, [id]);
   return (
-    <div className="bg-[#f8f5f1] min-h-screen">
+    <div className="h-screen flex flex-col bg-[#f8f5f1] min-h-screen overflow-hidden">
       <Header />
-      <div className="px-[20vw] py-12">
-        <div className="flex">
-          <div className="min-w-50">
-            <img src={book?.cover || cover} alt="Book Cover" />
+      <div className="w-full flex flex-col px-[5vw] md:px-[10vw] lg:px-[20vw] py-12 overflow-y-auto">
+        <div className="flex flex-col lg:flex-row w-full">
+          <div className="lg:min-w-50 m-auto lg:m-0">
+            <img
+              src={book?.cover || cover}
+              alt="Book Cover"
+              className="min-w-50 w-full"
+            />
           </div>
-          <div className="flex flex-col pl-15 gap-2 text-lg">
-            <h1 className="font-bold text-3xl">{book?.title || "Title"}</h1>
-            <p className="text-gray-600 text-xl">
+          <div className="flex-1 min-w-0 mt-6 lg:mt-0 flex flex-col lg:pl-[5vw] gap-2 text-lg">
+            <h1 className="font-bold text-xl lg:text-3xl text-center lg:text-left">
+              {book?.title || "Title"}
+            </h1>
+            <p className="text-gray-600 text-xl text-center lg:text-left">
               {book?.authors
                 .map((a) =>
                   `${a.firstname || ""} ${a.lastname || ""}`
@@ -87,22 +93,24 @@ export default function BookInfoPage() {
                 )
                 .join(", ") || "N/a"}
             </p>
-            <p>
+            <p className="text-center lg:text-left">
               {[
                 book?.publisher?.name.replace(",", "") || "",
                 book?.pub_year,
               ].join(", ")}
             </p>
-            <div className="pt-3">
+            <div className="pt-3 m-auto lg:m-0">
               <DownloadButton
                 color="#f4b759"
                 hoverColor="#f2a73e"
                 options={book?.files}
               />
             </div>
-            <div className="pt-10 flex flex-col gap-2">
+            <div className="pt-10 flex flex-col gap-2 wrap-break-word">
               <span className="font-bold">Résumé :</span>
-              <p className="whitespace-pre-wrap">{book?.summary}</p>
+              <p className="whitespace-pre-wrap wrap-break-word">
+                {book?.summary}
+              </p>
             </div>
             {book?.serie ? <p>Serie: {book?.serie?.name}</p> : <></>}
             <p>
@@ -123,7 +131,7 @@ export default function BookInfoPage() {
             {book?.notes && (
               <div className="flex flex-col gap-2">
                 <span className="font-bold">Notes :</span>
-                <ul className="list-disc list-outside">
+                <ul className="list-disc list-inside lg:list-outside wrap-break-word">
                   {book?.notes.map((note, index) => (
                     <li key={index}>{note}</li>
                   ))}

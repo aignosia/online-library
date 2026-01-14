@@ -57,7 +57,6 @@ export default function SignUpCard() {
       input.password !== "" &&
       input.password.length >= 8
     ) {
-      console.log(input);
       const signupAction = async () => {
         setAuthData((prev) => ({
           ...prev,
@@ -75,7 +74,6 @@ export default function SignUpCard() {
         if (response.ok) {
           auth.loginAction(new URLSearchParams(authData));
         } else if (response.status == 422) {
-          console.log(res);
           setErrors((prev) => ({ ...prev, auth: true }));
         }
       };

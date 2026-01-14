@@ -8,28 +8,22 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const loginAction = async (data: URLSearchParams) => {
-    data.forEach((e) => console.log(e));
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: data,
-      });
-      const res = await response.json();
-      console.log(res);
-      if (response.ok) {
-        setUser(res.user);
-        setToken(res.access_token);
-        localStorage.setItem("site", res.access_token);
-        navigate("/home");
-        return;
-      }
-      throw new Error(res.message);
-    } catch (err) {
-      console.log(err);
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: data,
+    });
+    const res = await response.json();
+    if (response.ok) {
+      setUser(res.user);
+      setToken(res.access_token);
+      localStorage.setItem("site", res.access_token);
+      navigate("/home");
+      return;
     }
+    throw new Error(res.message);
   };
 
   const logOut = () => {
