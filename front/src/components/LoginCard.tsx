@@ -17,11 +17,16 @@ export default function LoginCard() {
 
   const auth = useContext(AuthContext);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setAuthError(false);
     if (input.username !== "" && input.password !== "") {
-      auth.loginAction(new URLSearchParams(input));
-      if (!auth.user) setAuthError(true);
+      try {
+        await auth.loginAction(new URLSearchParams(input));
+      } catch (err) {
+        console.log(err);
+        setAuthError(true);
+      }
       return;
     }
     setAuthError(true);
