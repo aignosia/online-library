@@ -4,12 +4,15 @@ import { useNavigate } from "react-router";
 import { useContext, useState } from "react";
 import { AuthContext } from "../services/AuthContext";
 import logo from "/logo.png";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { MdClose, MdMenu } from "react-icons/md";
 
 export default function Header() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const handleLoginButtonClick = () => {
     navigate("/login");
@@ -20,17 +23,18 @@ export default function Header() {
   };
   return (
     <header className="w-full">
-      <nav className="px-[3vw] h-17 py-4 w-full flex justify-between items-center bg-white">
+      <nav className="px-[5vw] md:px-[3vw] h-17 py-4 w-full flex justify-between items-center bg-white">
         <div className="text-2xl text-gray-700 font-bold flex items-center gap-2">
+          {/* Logo and title */}
           <img src={logo} alt="Logo" className="h-7" />
           <Link to="/home">
             <p>
-              <span className="text-[#f4b759]">Online</span>{" "}
-              <span className="text-gray-700">Library</span>
+              <span className="text-[#f4b759]">RecoMind</span>
             </p>
           </Link>
         </div>
-        <div className="flex items-center gap-8">
+        {/* Menu de navigation desktop */}
+        <div className="hidden lg:flex items-center gap-8">
           <div className="">
             <ul className="flex font-medium text-gray-900 gap-8">
               <li className="text-gray-700 hover:text-[#f4b759]">
@@ -45,23 +49,7 @@ export default function Header() {
             {auth.user ? (
               <>
                 <button className="" onClick={handleUserButtonClick}>
-                  {
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M18 20a6 6 0 0 0-12 0" />
-                      <circle cx="12" cy="10" r="4" />
-                      <circle cx="12" cy="12" r="10" />
-                    </svg>
-                  }
+                  <FaRegCircleUser className="w-5 h-5" />
                 </button>
                 {isMenuOpen && (
                   <div className="absolute -ml-[130px] bg-white rounded-2xl p-3 shadow z-50 min-w-[150px]">
@@ -89,6 +77,62 @@ export default function Header() {
             )}
           </div>
         </div>
+        {/* Mobile components */}
+        <button
+          className="lg:hidden p-2 text-gray-700 z-50"
+          onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+        >
+          {isMobileNavOpen ? (
+            <MdClose className="w-7 h-7" />
+          ) : (
+            <MdMenu className="w-7 h-7" />
+          )}
+        </button>
+
+        {/* MOBILE MENU OVERLAY */}
+        {isMobileNavOpen && (
+          <div className="fixed inset-0 bg-white z-40 flex flex-col p-8 pt-24 gap-6 lg:hidden animate-in slide-in-from-top duration-300">
+            <ul className="flex flex-col font-medium text-xl text-gray-900 gap-6">
+              <li>
+                <Link
+                  to="/categories"
+                  onClick={() => setIsMobileNavOpen(false)}
+                >
+                  Catégories
+                </Link>
+              </li>
+              <li>
+                <Link to="/history" onClick={() => setIsMobileNavOpen(false)}>
+                  Historique
+                </Link>
+              </li>
+            </ul>
+
+            <div className="mt-4 border-t pt-6">
+              {auth.user ? (
+                <div className="space-y-4">
+                  <p className="text-xl font-bold">{auth.user?.full_name}</p>
+                  <Button
+                    color="#f4b759"
+                    hoverColor="#f2a73e"
+                    content="Déconnexion"
+                    onClick={() => {
+                      auth.logOut();
+                      setIsMobileNavOpen(false);
+                    }}
+                  />
+                </div>
+              ) : (
+                <Button
+                  color="#f4b759"
+                  hoverColor="#f2a73e"
+                  content="Connexion"
+                  onClick={handleLoginButtonClick}
+                />
+              )}
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );

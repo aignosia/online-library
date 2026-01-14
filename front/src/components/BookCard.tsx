@@ -11,7 +11,7 @@ interface BookCardProps {
 export default function BookCard(props: BookCardProps) {
   return (
     <Link to={`/book/${props.id}`}>
-      <div className="mr-0 flex-1 rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
+      <div className="mr-0 min-w-10 md:flex-1 rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
         <img
           src={props.cover || cover}
           alt="Book Cover"

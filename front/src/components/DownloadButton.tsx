@@ -89,21 +89,23 @@ export default function DownloadButton(props: DownloadButtonProps) {
             "--btn-hover-color": props.hoverColor,
           } as React.CSSProperties
         }
-        className="bg-(--btn-color) hover:bg-(--btn-hover-color) flex items-center font-medium text-gray-700 hover:text-gray-900 px-6 py-2 rounded-md transition-colors"
+        className="bg-(--btn-color) hover:bg-(--btn-hover-color) w-45 md:w-64 flex md:gap-2 items-center justify-center font-medium text-gray-700 hover:text-gray-900 px-6 py-2 rounded-md transition-colors"
       >
-        {loading ? (
-          <AiOutlineLoading3Quarters className="animate-spin" />
-        ) : (
-          <HiDownload size={18} />
-        )}
-        <span className="font-medium">Télécharger</span>
+        <div className="flex items-center md:gap-2">
+          {loading ? (
+            <AiOutlineLoading3Quarters className="animate-spin" />
+          ) : (
+            <HiDownload size={18} />
+          )}
+          <span className="font-medium">Télécharger</span>
+        </div>
         <HiChevronDown
           className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-64 origin-top-left rounded-xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden z-50">
+        <div className="absolute left-0 mt-2 w-45 md:w-64 origin-top-left rounded-xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden z-50">
           <div className="bg-gray-50 px-4 py-2 border-b border-gray-100">
             <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
               Options disponibles

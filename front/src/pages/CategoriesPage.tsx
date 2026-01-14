@@ -10,9 +10,9 @@ export default function CategoriesPage(props: CategoryPageProps) {
   return (
     <div className="h-screen flex flex-col bg-[#f8f5f1] overflow-y-hidden">
       <Header />
-      <div className="flex flex-col px-[20vw] py-8 overflow-y-auto">
+      <div className="flex flex-col px-[5vw] md:px-[20vw] py-8 overflow-y-auto">
         <h1 className="text-3xl font-bold pb-5">Catégories</h1>
-        <div className="columns-3 gap-8">
+        <div className="columns-1 md:columns-2 lg:columns-3 md:gap-8">
           {props.categories
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((cat) => {
@@ -24,9 +24,10 @@ export default function CategoriesPage(props: CategoryPageProps) {
                   <p className="pb-2 font-bold text-xl">{cat.name}</p>
                   {cat.subclasses
                     .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((sc) => {
+                    .map((sc, index) => {
                       return (
                         <Link
+                          key={index}
                           to={{
                             pathname: `/category/${sc.id}`,
                             search: `?name=${encodeURIComponent(sc.name)}&route=${encodeURIComponent(`subclasses/${sc.id}/books?offset=0&limit=50`)}`,
