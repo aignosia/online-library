@@ -34,26 +34,30 @@ export default function HomePage(props: HomePageProps) {
 
   const items = [...bookCards, ...placeholders];
   return (
-    <div className="h-screen flex flex-col bg-[#f8f5f1]">
+    <div className="h-screen flex flex-col bg-[#f8f5f1] overflow-hidden">
       <Header />
-      <div className="flex-1 flex flex-col pt-6 px-[3vw] -ml-8 overflow-hidden">
-        <div className="">
+      <div className="flex-1 flex flex-col lg:pt-6 md:px-[3vw] lg:-ml-8 overflow-hidden">
+        <div className="hidden lg:flex">
           <SearchBar />
         </div>
-        <div className="mt-6 flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-y-auto lg:overflow-hidden pt-6">
           <div className="flex-1 flex flex-col">
             <div className="px-8">
-              <p className="text-gray-600 pb-2 text-lg">Recommandations</p>
-              <div className="w-full h-px mx-auto border border-gray-400"></div>
+              <p className="text-gray-600 pb-2 font-semibold text-2xl">
+                Recommandations
+              </p>
+              <div className="hidden lg:flex w-full h-px mx-auto border border-gray-400"></div>
             </div>
-            <div className="pb-8 px-8 flex-1 overflow-y-auto scrollbar-hidden overflow-visible">
-              <div className="pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-10 overflow-visible">
+            <div className="pb-8 px-8 flex-1 lg:overflow-y-auto scrollbar-hidden">
+              <div className="pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-3 md:gap-10">
                 {items.map((it) => it)}
               </div>
             </div>
           </div>
-          <div className="w-[500px] flex flex-col">
-            <p className="text-gray-500 pb-2 text-lg">Principales catégories</p>
+          <div className="hidden w-[500px] lg:flex flex-col">
+            <p className="text-gray-600 pb-2 font-semibold text-2xl">
+              Principales catégories
+            </p>
             <div className="w-full h-px border border-gray-400"></div>
             <CatListCard categories={props.categories} />
           </div>

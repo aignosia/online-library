@@ -32,11 +32,13 @@ export default function BookList(props: BookListProps) {
 
   const items = [...bookCards, ...placeholders];
   return (
-    <div className="flex flex-col flex-1 pb-8 px-[20vw] overflow-y-auto">
-      <div className="bg-[#f8f5f1] py-8">
-        <h1 className="text-3xl font-bold">{props.title}</h1>
+    <div className="flex flex-col flex-1 lg:pb-8 px-[5vw] md:px-[10vw] lg:px-[20vw] overflow-y-auto py-4">
+      <div className="bg-[#f8f5f1] pb-4 lg:py-8">
+        <p className="text-gray-600 text-2xl lg:text-3xl font-semibold">
+          {props.title}
+        </p>
       </div>
-      <div className="pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-10">
+      <div className="lg:pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-3 md:gap-10">
         {items.map((it) => it)}
       </div>
     </div>
