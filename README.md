@@ -1,4 +1,8 @@
-# Online Library
+# RecoMind
+
+**Website:** [recomind.netlify.app](recomind.netlify.app)
+
+**API SwaggerUI Documentation:** [https://recomind-api.onrender.com/docs](https://recomind-api.onrender.com/docs)
 
 This project is an online library with a book recommendation system. It is a
 full stack app with React.js and TailwindCSS for the frontend, FastAPI for the
