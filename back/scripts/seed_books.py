@@ -206,6 +206,16 @@ def get_book_subclasses(codes: list[str], mapping: Any) -> list[Subclass]:
             cache.bookclasses[bookclass_name] = BookClass(name=bookclass_name)
 
         subclasses_mapping = bookclass_mapping.get("subclasses")
+
+        if "." in code:
+            code = code.split(".")[0]
+
+        if code[1:].isnumeric():
+            code = code[0]
+
+        if len(code) > 2:
+            code = code[:-1]
+
         for subclass_mapping in subclasses_mapping:
             subclass_name = subclass_mapping.get("name")
             if subclass_mapping.get("code") == code:
