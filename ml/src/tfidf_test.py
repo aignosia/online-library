@@ -6,9 +6,9 @@ import typer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def process_data(book_id: int, path: str):
+def process_data(model_path: str, data_path: str, book_id: int):
     print("Loading data...")
-    df = pd.read_csv(path)
+    df = pd.read_csv(data_path)
     df["authors"] = (
         df["authors"]
         .apply(json.loads)
@@ -22,7 +22,7 @@ def process_data(book_id: int, path: str):
         )
 
     print("Loading TF-IDF vectorizer...")
-    tfidf = joblib.load("models/tfidf_vectorizer.joblib")
+    tfidf = joblib.load(model_path)
     print("Computing embeddings...")
     tfidf_matrix = tfidf.transform(df["text"].fillna(""))
     book_vector = tfidf_matrix[book_id]
@@ -35,8 +35,8 @@ def process_data(book_id: int, path: str):
     return df.iloc[[book_id]], recommendations
 
 
-def main(book_id: int, path: str):
-    book, recommendations = process_data(book_id, path)
+def main(model_path: str, data_path: str, book_id: int):
+    book, recommendations = process_data(model_path, data_path, book_id)
     print(f"Book:\n{book[['authors', 'title']]}")
     print(f"Recommendations:\n{recommendations[['authors', 'title']]}")
 
