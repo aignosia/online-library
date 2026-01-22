@@ -9,6 +9,7 @@ from app.books.services import (
     get_books,
     get_books_search,
     get_search_autocomplete,
+    get_similar_books,
 )
 from app.config.db import SessionDep
 
@@ -48,3 +49,8 @@ def autocomplete_search(
 @router.get("/{id}", response_model=BookReadFull)
 def read_book(id: int, session: SessionDep):
     return get_book(id, session)
+
+
+@router.get("/{id}/recommendations", response_model=list[BookRead])
+def read_similar_book_recommendations(id: int, session: SessionDep):
+    return get_similar_books(id, session)

@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
+from pgvector.sqlalchemy import Vector
 from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
 from sqlmodel.main import Relationship
@@ -18,6 +19,7 @@ class UserBase(SQLModel):
 
 class User(UserBase, table=True):
     hashed_password: str
+    profile: Any | None = Field(default=None, sa_type=Vector(10000))
 
     books: list["Book"] = Relationship(
         back_populates="users", link_model=UserBookDownload

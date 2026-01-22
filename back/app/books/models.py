@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
+from pgvector.sqlalchemy import Vector
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel
 
 from app.links.models import (
@@ -35,6 +36,7 @@ class BookBase(SQLModel):
 
 class Book(BookBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    embedding: Any | None = Field(default=None, sa_type=Vector(10000))
 
     publisher: Optional["Publisher"] = Relationship(back_populates="books")
     serie: Optional["Serie"] = Relationship(back_populates="books")
@@ -54,7 +56,14 @@ class Book(BookBase, table=True):
 
 
 class BookCreate(BookBase):
-    id: int | None
+    id: int
+    publisher: Optional["Publisher"] = None
+    serie: Optional["Serie"] = None
+    authors: list["Author"] = []
+    subjects: list["Subject"] = []
+    files: list["File"] = []
+    users: list["User"] = []
+    subclasses: list["Subclass"] = []
 
 
 class BookRead(SQLModel):

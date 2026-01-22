@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 import jwt
+import numpy as np
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
@@ -115,3 +116,77 @@ def get_books_by_user(
         .limit(limit)
     ).all()
     return books
+
+
+def update_user_profile(username: str, book_id: int, session: Session):
+    user = session.get(User, username)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    book = session.get(Book, book_id)
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+
+    user_books = list(get_books_by_user(username, None, None, session))
+    if book in user_books:
+        user_books.remove(book)
+
+    if isinstance(user.profile, list):
+        user.profile = np.array(user.profile)
+    if isinstance(book.embedding, list):
+        book.embedding = np.array(book.embedding)
+
+    if user.profile is None:
+        user.profile = book.embedding
+    else:
+        user.profile = (user.profile * len(user_books) + book.embedding) / (
+            len(user_books) + 1
+        )
+
+    session.add(user)
+    session.commit()
+    return user
+
+
+def add_user_download(username: str, book_id: int, session: Session):
+    user = session.get(User, username)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    book = session.get(Book, book_id)
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+
+    record_datetime = datetime.now()
+    user_download = UserBookDownload(
+        username=username, book_id=book_id, dt_record=record_datetime
+    )
+    response = user_download.model_dump()
+    session.add(user_download)
+    session.commit()
+    session.refresh(user_download)
+    return response
+
+
+def rerank_books(query: list[Book], response: list[Book]):
+    reranked_response = response.copy()
+    book_languages = [book.language_code for book in query]
+    reranked_response.sort(
+        key=lambda x: x.language_code in book_languages,
+        reverse=True,
+    )
+    return reranked_response[:10]
+
+
+def get_user_book_recommmendations(username: str, session: Session):
+    user = session.get(User, username)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    recommendations = session.exec(
+        select(Book)
+        .order_by(Book.embedding.cosine_distance(user.profile))  # ty:ignore[possibly-missing-attribute]
+        .limit(50)
+    )
+    user_downloads = get_books_by_user(username, None, None, session)
+    return rerank_books(user_downloads, list(recommendations))

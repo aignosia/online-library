@@ -22,7 +22,7 @@ class UserBookDownload(SQLModel, table=True):
         default=None, primary_key=True, foreign_key="user.username"
     )
     book_id: int = Field(default=None, primary_key=True, foreign_key="book.id")
-    dt_record: datetime
+    dt_record: datetime = Field(default=None, primary_key=True)
 
 
 class BookSubclassLink(SQLModel, table=True):
