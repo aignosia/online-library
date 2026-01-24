@@ -4,7 +4,7 @@ from sqlmodel import Session, func, or_, select
 
 from app.authors.models import Author
 from app.books.models import Book, BookCreate
-from app.links.models import BookAuthorLink
+from app.links.models import BookAuthorLink, UserBookDownload
 from app.recmodel.services import compute_embedding
 
 
@@ -87,7 +87,7 @@ def get_books_search(q: str, session: Session):
                 author_vector.op("@@")(ts_query),
             )
         )
-        .distinct()
+        .group_by(Book.id)  # ty:ignore[invalid-argument-type]
     ).all()
 
     return results
@@ -121,15 +121,43 @@ def get_search_autocomplete(q: str, session: Session):
     return list(dict.fromkeys(results[:10]))
 
 
-def rerank_books(query: Book, response: list[Book]):
+def get_book_count(session: Session):
+    count = session.exec(select(func.count()).select_from(Book)).one()
+    return count
+
+
+def get_popular_books(offset: int, limit: int, session: Session):
+    subquery = (
+        select(
+            UserBookDownload.book_id,
+            func.count(UserBookDownload.book_id).label("download"),
+        )
+        .group_by(UserBookDownload.book_id)
+        .offset(offset)
+        .limit(limit)
+        .subquery()
+    )
+    books = session.exec(
+        select(Book)
+        .outerjoin(subquery)
+        .order_by(
+            func.coalesce(subquery.c.download, 0).label("download").desc()
+        )
+        .offset(offset)
+        .limit(limit)
+    ).all()
+    return books
+
+
+def rerank_books(query: Book, response: list[Book], limit: int):
     reranked_response = response.copy()
     reranked_response.sort(
         key=lambda x: x.language_code == query.language_code, reverse=True
     )
-    return reranked_response[:10]
+    return reranked_response[:limit]
 
 
-def get_similar_books(id: int, session: Session):
+def get_similar_books(id: int, limit: int, session: Session):
     book = session.get(Book, id)
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
@@ -138,6 +166,6 @@ def get_similar_books(id: int, session: Session):
         select(Book)
         .where(Book.id != book.id)
         .order_by(Book.embedding.cosine_distance(book.embedding))  # ty:ignore[possibly-missing-attribute]
-        .limit(50)
+        .limit(limit + 50)
     ).all()
-    return rerank_books(book, list(similar_books))
+    return rerank_books(book, list(similar_books), limit)

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { apiClient } from "../services/api";
-import type { Author } from "../App";
+import { type Book, type Author } from "../App";
 import Header from "../components/Header";
 import cover from "../assets/default-book-cover.png";
 import DownloadButton from "../components/DownloadButton";
+import BookCard from "../components/BookCard";
 
 interface Publisher {
   id: number;
@@ -59,28 +60,38 @@ interface BookFull {
 export default function BookInfoPage() {
   const { id } = useParams();
   const [book, setBook] = useState<BookFull>();
+  const [similarBooks, setSimilarBooks] = useState<Array<Book>>([]);
+  const [hasCover, setHasCover] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
-      const data = await apiClient.request(`books/${id}`, {
+      const fetchedBook = await apiClient.request(`books/${id}`, {
         method: "GET",
       });
-      setBook(data);
+      setBook(fetchedBook);
+      const similarBookNum = 60;
+      const fetchedSimilarBooks = await apiClient.request(
+        `books/${id}/recommendations?limit=${similarBookNum}`,
+      );
+      const start = Math.floor(Math.random() * (similarBookNum - 6));
+      const end = start + 12;
+      setSimilarBooks(fetchedSimilarBooks.slice(start, end));
     };
     fetchData();
   }, [id]);
   return (
-    <div className="h-screen flex flex-col bg-[#f8f5f1] min-h-screen overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#f8f5f1] min-h-screen">
       <Header />
-      <div className="w-full flex flex-col px-[5vw] md:px-[10vw] lg:px-[20vw] py-12 overflow-y-auto">
+      <div className="w-full flex flex-col flex-1 px-[5vw] md:px-[10vw] lg:px-[20vw] py-12 overflow-y-auto">
         <div className="flex flex-col lg:flex-row w-full">
           <div className="lg:min-w-50 m-auto lg:m-0">
             <img
-              src={book?.cover || cover}
+              src={hasCover ? book?.cover || cover : cover}
               alt="Book Cover"
-              className="min-w-50 w-full"
+              className="min-w-50 w-full max-w-60"
+              onError={() => setHasCover(false)}
             />
           </div>
-          <div className="flex-1 min-w-0 mt-6 lg:mt-0 flex flex-col lg:pl-[5vw] gap-2 text-lg">
+          <div className="mt-6 lg:mt-0 flex flex-col lg:pl-[5vw] gap-2 text-lg">
             <h1 className="font-bold text-xl lg:text-3xl text-center lg:text-left">
               {book?.title || "Title"}
             </h1>
@@ -138,6 +149,29 @@ export default function BookInfoPage() {
                 </ul>
               </div>
             )}
+          </div>
+        </div>
+        <div className="flex flex-col w-full py-10">
+          <h1 className="font-bold text-2xl py-5">Livres similaires</h1>
+          <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
+            {similarBooks.map((it) => {
+              const authorsString = it.authors
+                .map((a) =>
+                  `${a.firstname ? a.firstname + " " : ""}${a.lastname}`
+                    .replace(",", "")
+                    .trim(),
+                )
+                .join(", ");
+              return (
+                <BookCard
+                  key={`book${it.id}`}
+                  id={it.id}
+                  title={it.title}
+                  author={authorsString}
+                  cover={it.cover}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
