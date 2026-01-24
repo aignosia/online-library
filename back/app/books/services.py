@@ -154,6 +154,8 @@ def rerank_books(query: Book, response: list[Book], limit: int):
     reranked_response.sort(
         key=lambda x: x.language_code == query.language_code, reverse=True
     )
+    if query in response:
+        reranked_response.remove(query)
     return reranked_response[:limit]
 
 
