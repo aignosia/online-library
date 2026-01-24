@@ -112,6 +112,8 @@ def get_books_by_user(
         .join(UserBookDownload)
         .join(User)
         .where(User.username == username)
+        .group_by(UserBookDownload.dt_record, Book.id)  # ty:ignore[invalid-argument-type]
+        .order_by(UserBookDownload.dt_record)  # ty:ignore[invalid-argument-type]
         .offset(offset)
         .limit(limit)
     ).all()
@@ -174,6 +176,9 @@ def rerank_books(query: list[Book], response: list[Book], limit: int):
     reranked_response.sort(
         key=lambda x: x.language_code in book_languages,
         reverse=True,
+    )
+    reranked_response = list(
+        filter(lambda x: x not in query, reranked_response)
     )
     return reranked_response[:limit]
 

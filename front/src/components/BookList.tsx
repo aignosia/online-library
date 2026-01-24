@@ -32,7 +32,7 @@ export default function BookList(props: BookListProps) {
           {props.title}
         </p>
       </div>
-      <div className="lg:pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-5 md:gap-10">
+      <div className="lg:pt-7 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-5 md:gap-10">
         {bookCards.map((it) => it)}
       </div>
     </div>

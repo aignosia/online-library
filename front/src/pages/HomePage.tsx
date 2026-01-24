@@ -1,37 +1,50 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import type { Book, Categorie } from "../App";
 import BookCard from "../components/BookCard";
 import CatListCard from "../components/CatListCard";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
 import { AuthContext } from "../services/AuthContext";
+import { apiClient } from "../services/api";
 
-interface HomePageProps {
-  categories: Array<Categorie>;
-  books: Array<Book>;
-}
-
-export default function HomePage(props: HomePageProps) {
+export default function HomePage() {
   const auth = useContext(AuthContext);
-  const bookCards = props.books.map((it) => {
-    const authorsString = it.authors
-      .map((a) =>
-        `${a.firstname ? a.firstname + " " : ""}${a.lastname ?? ""}`.replace(
-          ",",
-          "",
-        ),
-      )
-      .join(", ");
-    return (
-      <BookCard
-        key={`book${it.id}`}
-        id={it.id}
-        title={it.title}
-        author={authorsString}
-        cover={it.cover}
-      />
-    );
-  });
+  const [books, setBooks] = useState<Book[]>([]);
+  const [categories, setCategories] = useState<Categorie[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const limit = 20;
+      let endpoint = "";
+      if (auth.user) {
+        endpoint = `users/me/books/recommendations?limit=${limit}`;
+        setBooks(
+          await apiClient.request(endpoint, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }),
+        );
+      } else {
+        endpoint = `books/popular?limit=${limit}`;
+        setBooks(
+          await apiClient.request(endpoint, {
+            method: "GET",
+          }),
+        );
+      }
+      const fetchedCategories = await apiClient.request("classes", {
+        method: "GET",
+      });
+      fetchedCategories.sort((a: Categorie, b: Categorie) =>
+        a.name.localeCompare(b.name),
+      );
+      setCategories(fetchedCategories);
+    };
+
+    fetchData();
+  }, [auth.token, auth.user]);
 
   return (
     <div className="h-screen flex flex-col bg-[#f8f5f1] overflow-hidden">
@@ -50,7 +63,25 @@ export default function HomePage(props: HomePageProps) {
             </div>
             <div className="pb-8 px-4 md:px-8 flex-1 lg:overflow-y-auto scrollbar-hidden">
               <div className="pt-7 grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6 md:gap-10">
-                {bookCards.map((it) => it)}
+                {books.map((it) => {
+                  const authorsString = it.authors
+                    .map((a) =>
+                      `${a.firstname ? a.firstname + " " : ""}${a.lastname ?? ""}`.replace(
+                        ",",
+                        "",
+                      ),
+                    )
+                    .join(", ");
+                  return (
+                    <BookCard
+                      key={`book${it.id}`}
+                      id={it.id}
+                      title={it.title}
+                      author={authorsString}
+                      cover={it.cover}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -59,7 +90,7 @@ export default function HomePage(props: HomePageProps) {
               Principales catégories
             </p>
             <div className="w-full h-px border border-gray-400"></div>
-            <CatListCard categories={props.categories} />
+            <CatListCard categories={categories} />
           </div>
         </div>
       </div>
