@@ -84,16 +84,26 @@ function App() {
           <Route
             path="/history"
             element={
-              <BookListingPage title="Historique" route="books?limit=20" />
+              <BookListingPage
+                title="Historique"
+                route="users/me/books?limit=20"
+                authorization={true}
+              />
             }
           />
           <Route
             path="/main-category/:id"
-            element={<BookListingPage />}
+            element={<BookListingPage authorization={false} />}
           ></Route>
-          <Route path="/category/:id" element={<BookListingPage />}></Route>
+          <Route
+            path="/category/:id"
+            element={<BookListingPage authorization={false} />}
+          ></Route>
           <Route path="/book/:id" element={<BookInfoPage />}></Route>
-          <Route path="/search" element={<BookListingPage />}></Route>
+          <Route
+            path="/search"
+            element={<BookListingPage authorization={false} />}
+          ></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
