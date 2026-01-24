@@ -6,7 +6,7 @@ interface BookListProps {
   books: Array<Book>;
 }
 export default function BookList(props: BookListProps) {
-  const bookCards = props.books.map((it) => {
+  const bookCards = props.books.map((it, index) => {
     const authorsString = it.authors
       .map((a) =>
         `${a.firstname ? a.firstname + " " : ""}${a.lastname || ""}`
@@ -16,7 +16,7 @@ export default function BookList(props: BookListProps) {
       .join(", ");
     return (
       <BookCard
-        key={`book${it.id}`}
+        key={`book${index}`}
         id={it.id}
         title={it.title}
         author={authorsString}
