@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import cover from "../assets/default-book-cover.png";
 
@@ -9,19 +10,21 @@ interface BookCardProps {
 }
 
 export default function BookCard(props: BookCardProps) {
+  const [hasCover, setHasCover] = useState(true);
   return (
     <Link to={`/book/${props.id}`}>
-      <div className="mr-0 min-w-10 md:flex-1 rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
+      <div className="m-auto min-w-20 grow basis-1/5 max-w-56 h-full rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
         <img
-          src={props.cover || cover}
+          src={hasCover ? props.cover || cover : cover}
           alt="Book Cover"
-          className="w-full object-cover"
+          className="w-full object-cover max-h-80"
+          onError={() => setHasCover(false)}
         />
         <div className="p-4">
-          <p className="text-lg text-gray-500 h-12 overflow-clip">
-            {props.title}
+          <p className="text-lg max-h-13 overflow-clip">{props.title}</p>
+          <p className="mt-4 text-gray-500 text-lg overflow-clip max-h-13">
+            {props.author}
           </p>
-          <p className="mt-4 text-lg">{props.author}</p>
         </div>
       </div>
     </Link>

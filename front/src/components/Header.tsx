@@ -40,9 +40,13 @@ export default function Header() {
               <li className="text-gray-700 hover:text-[#f4b759]">
                 <Link to="/categories">Catégories</Link>
               </li>
-              <li className="left-3.5 text-gray-700 hover:text-[#f4b759]">
-                <Link to="/history">Historique</Link>
-              </li>
+              {auth.user ? (
+                <li className="left-3.5 text-gray-700 hover:text-[#f4b759]">
+                  <Link to="/history">Historique</Link>
+                </li>
+              ) : (
+                <></>
+              )}
             </ul>
           </div>
           <div className="text-gray-700">

@@ -6,8 +6,9 @@ import CategoriesPage from "./pages/CategoriesPage";
 import BookListingPage from "./pages/BookListingPage";
 import { AuthProvider } from "./services/AuthProvider";
 import { apiClient } from "./services/api";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BookInfoPage from "./pages/BookInfoPage";
+import { AuthContext } from "./services/AuthContext";
 
 export interface Author {
   id: number;
@@ -38,25 +39,32 @@ export interface Categorie {
 }
 
 function App() {
-  const [books, setBooks] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const auth = useContext(AuthContext);
+  const [books, setBooks] = useState(new Array<Book>());
+  const [categories, setCategories] = useState(new Array<Categorie>());
 
   useEffect(() => {
     const fetchData = async () => {
+      const limit = 20;
+      let endpoint = "";
+      if (auth.user) endpoint = `users/me/books/recommendations?limit=${limit}`;
+      else endpoint = `books/popular?limit=${limit}`;
       setBooks(
-        await apiClient.request("books?limit=20", {
+        await apiClient.request(endpoint, {
           method: "GET",
         }),
       );
-      setCategories(
-        await apiClient.request("classes", {
-          method: "GET",
-        }),
+      const fetchedCategories = await apiClient.request("classes", {
+        method: "GET",
+      });
+      fetchedCategories.sort((a: Categorie, b: Categorie) =>
+        a.name.localeCompare(b.name),
       );
+      setCategories(fetchedCategories);
     };
 
     fetchData();
-  }, []);
+  }, [auth.user]);
 
   return (
     <BrowserRouter>

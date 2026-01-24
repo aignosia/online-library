@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, Query
 
 from app.config.db import SessionDep
 from app.files.models import FileCreate, FileRead, FileReadWithBook
@@ -13,7 +15,11 @@ def create_file(file: FileCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[FileRead])
-def read_files(session: SessionDep, offset: int = 0, limit: int = 10):
+def read_files(
+    session: SessionDep,
+    offset: int = 0,
+    limit: Annotated[int, Query(le=100)] = 10,
+):
     return get_files(offset, limit, session)
 
 

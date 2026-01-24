@@ -43,8 +43,9 @@ async def read_own_book_downloads(
 async def read_own_book_recommendations(
     current_user: Annotated[User, Depends(get_current_active_user)],
     session: SessionDep,
+    limit: Annotated[int, Query(le=100)] = 10,
 ):
-    return get_user_book_recommmendations(current_user.username, session)
+    return get_user_book_recommmendations(current_user.username, limit, session)
 
 
 @router.post("/me/books/{id}")

@@ -1,8 +1,10 @@
+import { useContext } from "react";
 import type { Book, Categorie } from "../App";
 import BookCard from "../components/BookCard";
 import CatListCard from "../components/CatListCard";
 import Header from "../components/Header";
 import SearchBar from "../components/SearchBar";
+import { AuthContext } from "../services/AuthContext";
 
 interface HomePageProps {
   categories: Array<Categorie>;
@@ -10,9 +12,15 @@ interface HomePageProps {
 }
 
 export default function HomePage(props: HomePageProps) {
+  const auth = useContext(AuthContext);
   const bookCards = props.books.map((it) => {
     const authorsString = it.authors
-      .map((a) => `${a.firstname ?? ""} ${a.lastname ?? ""}`.replace(",", ""))
+      .map((a) =>
+        `${a.firstname ? a.firstname + " " : ""}${a.lastname ?? ""}`.replace(
+          ",",
+          "",
+        ),
+      )
       .join(", ");
     return (
       <BookCard
@@ -25,14 +33,6 @@ export default function HomePage(props: HomePageProps) {
     );
   });
 
-  const minCols = 5;
-  const placeholdersNeeded = Math.max(0, minCols - bookCards.length);
-  const placeholders = [];
-
-  for (let i = 0; i < placeholdersNeeded; i++)
-    placeholders.push(<div key={"ph" + i}></div>);
-
-  const items = [...bookCards, ...placeholders];
   return (
     <div className="h-screen flex flex-col bg-[#f8f5f1] overflow-hidden">
       <Header />
@@ -42,15 +42,15 @@ export default function HomePage(props: HomePageProps) {
         </div>
         <div className="flex flex-1 overflow-y-auto lg:overflow-hidden pt-6">
           <div className="flex-1 flex flex-col">
-            <div className="px-8">
+            <div className="px-4 md:px-8">
               <p className="text-gray-600 pb-2 font-semibold text-2xl">
-                Recommandations
+                {auth.user ? "Recommandés" : "Populaires"}
               </p>
               <div className="hidden lg:flex w-full h-px mx-auto border border-gray-400"></div>
             </div>
-            <div className="pb-8 px-8 flex-1 lg:overflow-y-auto scrollbar-hidden">
-              <div className="pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-3 md:gap-10">
-                {items.map((it) => it)}
+            <div className="pb-8 px-4 md:px-8 flex-1 lg:overflow-y-auto scrollbar-hidden">
+              <div className="pt-7 grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-6 md:gap-10">
+                {bookCards.map((it) => it)}
               </div>
             </div>
           </div>

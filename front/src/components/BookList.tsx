@@ -9,7 +9,9 @@ export default function BookList(props: BookListProps) {
   const bookCards = props.books.map((it) => {
     const authorsString = it.authors
       .map((a) =>
-        `${a.firstname || ""} ${a.lastname || ""}`.replace(",", "").trim(),
+        `${a.firstname ? a.firstname + " " : ""}${a.lastname || ""}`
+          .replace(",", "")
+          .trim(),
       )
       .join(", ");
     return (
@@ -23,14 +25,6 @@ export default function BookList(props: BookListProps) {
     );
   });
 
-  const minCols = 5;
-  const placeholdersNeeded = Math.max(0, minCols - bookCards.length);
-  const placeholders = [];
-
-  for (let i = 0; i < placeholdersNeeded; i++)
-    placeholders.push(<div key={"ph" + i}></div>);
-
-  const items = [...bookCards, ...placeholders];
   return (
     <div className="flex flex-col flex-1 lg:pb-8 px-[5vw] md:px-[10vw] lg:px-[20vw] overflow-y-auto py-4">
       <div className="bg-[#f8f5f1] pb-4 lg:py-8">
@@ -38,8 +32,8 @@ export default function BookList(props: BookListProps) {
           {props.title}
         </p>
       </div>
-      <div className="lg:pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-3 md:gap-10">
-        {items.map((it) => it)}
+      <div className="lg:pt-7 flex-1 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] lg:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-5 md:gap-10">
+        {bookCards.map((it) => it)}
       </div>
     </div>
   );

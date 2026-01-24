@@ -168,17 +168,17 @@ def add_user_download(username: str, book_id: int, session: Session):
     return response
 
 
-def rerank_books(query: list[Book], response: list[Book]):
+def rerank_books(query: list[Book], response: list[Book], limit: int):
     reranked_response = response.copy()
     book_languages = [book.language_code for book in query]
     reranked_response.sort(
         key=lambda x: x.language_code in book_languages,
         reverse=True,
     )
-    return reranked_response[:10]
+    return reranked_response[:limit]
 
 
-def get_user_book_recommmendations(username: str, session: Session):
+def get_user_book_recommmendations(username: str, limit: int, session: Session):
     user = session.get(User, username)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -186,7 +186,7 @@ def get_user_book_recommmendations(username: str, session: Session):
     recommendations = session.exec(
         select(Book)
         .order_by(Book.embedding.cosine_distance(user.profile))  # ty:ignore[possibly-missing-attribute]
-        .limit(50)
+        .limit(limit + 50)
     )
     user_downloads = get_books_by_user(username, None, None, session)
-    return rerank_books(user_downloads, list(recommendations))
+    return rerank_books(user_downloads, list(recommendations), limit)
