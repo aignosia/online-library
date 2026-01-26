@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "./AuthContext";
+import { jwtDecode } from "jwt-decode";
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState(null);
+const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState(
+    localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user") || "{}")
+      : null,
+  );
   const [token, setToken] = useState(localStorage.getItem("site") || "");
   const navigate = useNavigate();
+
+  let decodedToken = null;
+  if (token) decodedToken = jwtDecode(token);
+  let expirationDate = null;
+  if (decodedToken && decodedToken.exp) expirationDate = decodedToken.exp;
+  if (expirationDate && expirationDate >= Date.now()) {
+    setUser(null);
+    localStorage.removeItem("user");
+    setToken("");
+    localStorage.removeItem("site");
+    navigate("/login");
+  }
 
   const loginAction = async (data: URLSearchParams) => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/token`, {
@@ -18,6 +35,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const res = await response.json();
     if (response.ok) {
       setUser(res.user);
+      localStorage.setItem("user", JSON.stringify(res.user));
       setToken(res.access_token);
       localStorage.setItem("site", res.access_token);
       navigate("/home");
@@ -28,6 +46,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logOut = () => {
     setUser(null);
+    localStorage.removeItem("user");
     setToken("");
     localStorage.removeItem("site");
     navigate("/login");
