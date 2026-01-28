@@ -1,7 +1,6 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "./AuthContext";
-import { jwtDecode } from "jwt-decode";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(
@@ -12,17 +11,26 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(localStorage.getItem("site") || "");
   const navigate = useNavigate();
 
-  let decodedToken = null;
-  if (token) decodedToken = jwtDecode(token);
-  let expirationDate = null;
-  if (decodedToken && decodedToken.exp) expirationDate = decodedToken.exp;
-  if (expirationDate && expirationDate >= Date.now()) {
-    setUser(null);
-    localStorage.removeItem("user");
-    setToken("");
-    localStorage.removeItem("site");
-    navigate("/login");
-  }
+  useEffect(() => {
+    const testAuthentication = async () => {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/me`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 401) {
+        setUser(null);
+        localStorage.removeItem("user");
+        setToken("");
+        localStorage.removeItem("site");
+        navigate("/login");
+      }
+    };
+    if (localStorage.getItem("user") || localStorage.getItem("site"))
+      testAuthentication();
+  }, [navigate, token]);
 
   const loginAction = async (data: URLSearchParams) => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/token`, {

@@ -13,7 +13,7 @@ export default function BookCard(props: BookCardProps) {
   const [hasCover, setHasCover] = useState(true);
   return (
     <Link to={`/book/${props.id}`}>
-      <div className="m-auto min-w-20 basis-1/5 max-w-50 h-full flex flex-col rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
+      <div className="m-auto min-w-12 basis-1/5 max-w-50 h-full flex flex-col rounded-xl bg-white overflow-hidden shadow-lg hover:scale-105">
         <div className="flex items- flex-1">
           <img
             src={hasCover ? props.cover || cover : cover}
