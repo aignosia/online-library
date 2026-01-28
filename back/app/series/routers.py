@@ -39,6 +39,6 @@ def read_books_by_serie(
     id: int,
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
     return get_books_by_serie(id, offset, limit, session)

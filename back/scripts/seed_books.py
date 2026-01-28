@@ -212,7 +212,7 @@ def get_book_subclasses(codes: list[str], mapping: Any) -> list[Subclass]:
             code = code[0]
 
         if len(code) > 2:
-            code = code[:-1]
+            code = code[:2]
 
         for subclass_mapping in subclasses_mapping:
             subclass_name = subclass_mapping.get("name")
@@ -346,8 +346,7 @@ def insert_book_in_db(record: Record):
     )
 
     cache.books[id] = book
-
-    typer.echo(f"Processed books: {len(cache.books)}\r", nl=False)
+    typer.echo(f"Treated books: {len(cache.books.keys())}\r", nl=False)
 
 
 def seed_books(data: str):
@@ -363,7 +362,7 @@ def seed_books(data: str):
             return
 
         map_xml(insert_book_in_db, data)
-        typer.echo(f"Treated books: {len(cache.books)}")
+        typer.echo(f"Treated books: {len(cache.books.keys())}")
         typer.echo("Adding entries...")
         session.add_all(cache.books.values())
         typer.echo("Commiting entries...")

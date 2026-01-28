@@ -1,8 +1,10 @@
+import math
+
 from fastapi import HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 
 from app.bookclasses.models import BookClass, BookClassCreate
-from app.books.models import Book
+from app.books.models import Book, BookRead
 from app.links.models import BookSubclassLink
 from app.subclasses.models import Subclass
 
@@ -43,4 +45,17 @@ def get_books_by_class(id: int, offset: int, limit: int, session: Session):
         .offset(offset)
         .limit(limit)
     ).all()
-    return books
+    books = [BookRead.model_validate(book) for book in books]
+    book_count = (
+        session.exec(
+            select(func.count())
+            .select_from(Book)
+            .join(BookSubclassLink)
+            .join(Subclass)
+            .join(BookClass)
+            .where(BookClass.id == id)
+        ).one_or_none()
+        or 0
+    )
+    max_offset = max(math.ceil(float(book_count / limit)) - 1, 0)
+    return {"total_books": book_count, "max_offset": max_offset, "books": books}

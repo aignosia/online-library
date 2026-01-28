@@ -24,7 +24,7 @@ def create_author(author: AuthorCreate, session: SessionDep):
 def read_authors(
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
     return get_authors(offset, limit, session)
 
@@ -39,6 +39,6 @@ def read_books_by_author(
     id: int,
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
     return get_books_by_author(id, offset, limit, session)

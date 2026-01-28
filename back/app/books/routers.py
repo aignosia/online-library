@@ -23,21 +23,23 @@ def create_book(book: BookCreate, session: SessionDep):
     return add_book(book, session)
 
 
-@router.get("", response_model=list[BookRead])
+@router.get("")
 def read_books(
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
     return get_books(offset, limit, session)
 
 
-@router.get("/search", response_model=list[BookRead])
+@router.get("/search")
 def search_books(
     session: SessionDep,
     q: Annotated[str, Query(min_length=2)],
+    offset: int = 0,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
-    return get_books_search(q, session)
+    return get_books_search(q, offset, limit, session)
 
 
 @router.get("/autocomplete")
@@ -54,11 +56,11 @@ def read_book_count(session: SessionDep):
     return {"resource": "book", "count": count}
 
 
-@router.get("/popular", response_model=list[BookRead])
+@router.get("/popular")
 def read_popular_book(
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(lt=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
     return get_popular_books(offset, limit, session)
 
@@ -68,10 +70,11 @@ def read_book(id: int, session: SessionDep):
     return get_book(id, session)
 
 
-@router.get("/{id}/recommendations", response_model=list[BookRead])
+@router.get("/{id}/recommendations")
 def read_similar_book_recommendations(
     id: int,
     session: SessionDep,
-    limit: Annotated[int, Query(le=100)] = 10,
+    offset: int = 0,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
-    return get_similar_books(id, limit, session)
+    return get_similar_books(id, offset, limit, session)

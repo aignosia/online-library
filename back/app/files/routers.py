@@ -18,7 +18,7 @@ def create_file(file: FileCreate, session: SessionDep):
 def read_files(
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
     return get_files(offset, limit, session)
 
