@@ -6,12 +6,12 @@ import typer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-def main(out: str, path: str):
-    df = pd.read_csv(path)
+def main(out: str, data: str):
+    df = pd.read_csv(data)
 
     print("Computing TF-IDF...")
     tfidf = TfidfVectorizer(max_features=10000)
-    tfidf.fit_transform(df["text"].fillna(""))
+    tfidf.fit(df["text"].fillna(""))
 
     print("Writing TF-IDF vectorizer to tfidf_vectorizer.joblib")
     os.makedirs("models", exist_ok=True)

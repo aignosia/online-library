@@ -159,7 +159,7 @@ def get_book_subclasses(codes: list[str], mapping: Any):
             code = code[0]
 
         if len(code) > 2:
-            code = code[:-1]
+            code = code[:2]
 
         for subclass_mapping in subclasses_mapping:
             subclass_name = subclass_mapping.get("name")
