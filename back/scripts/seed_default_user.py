@@ -1,5 +1,5 @@
 import typer
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from app.config.db import engine, init_db
 from app.users.models import User, UserCreate
@@ -15,16 +15,20 @@ def seed_default_user():
     require creating a new account.
     """
     default_user = UserCreate(
-        username="johndoe",
+        email="johndoe@email.com",
         password="secret123",
         full_name="John Doe",
     )
     typer.echo(f"""Default user credentials:
-        username: {default_user.username}
+        email: {default_user.email}
         password: {default_user.password}
         full_name: {default_user.full_name}""")
 
-    if session.get(User, default_user.username):
+    db_user = session.exec(
+        select(User).where(User.email == default_user.email)
+    ).one_or_none()
+
+    if db_user:
         typer.echo("Default user seeding skipped: user already exists")
     else:
         add_user(default_user, session)

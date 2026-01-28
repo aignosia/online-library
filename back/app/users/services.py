@@ -1,5 +1,7 @@
+import math
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
+from uuid import UUID
 
 import jwt
 import numpy as np
@@ -7,9 +9,9 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jwt import InvalidTokenError
 from pwdlib import PasswordHash
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 
-from app.books.models import Book
+from app.books.models import Book, BookRead
 from app.config.config import settings
 from app.config.db import SessionDep
 from app.links.models import UserBookDownload
@@ -38,13 +40,13 @@ def add_user(user_in: UserCreate, session: Session):
     return db_user
 
 
-def get_user(username: str, session: Session):
-    user = session.get(User, username)
+def get_user(email: str, session: Session):
+    user = session.exec(select(User).where(User.email == email)).one_or_none()
     return user
 
 
-def authenticate_user(username: str, password: str, session: Session):
-    user = get_user(username, session)
+def authenticate_user(email: str, password: str, session: Session):
+    user = get_user(email, session)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -104,54 +106,60 @@ async def get_current_active_user(
     return current_user
 
 
-def get_books_by_user(
-    username: str, offset: int | None, limit: int | None, session: Session
-):
+def get_books_by_user(id: UUID, offset: int, limit: int, session: Session):
     books = session.exec(
         select(Book)
         .join(UserBookDownload)
         .join(User)
-        .where(User.username == username)
+        .where(User.id == id)
         .group_by(UserBookDownload.dt_record, Book.id)  # ty:ignore[invalid-argument-type]
         .order_by(UserBookDownload.dt_record)  # ty:ignore[invalid-argument-type]
         .offset(offset)
         .limit(limit)
     ).all()
-    return books
+    books = [BookRead.model_validate(book) for book in books]
+    book_count = session.exec(
+        select(func.count())
+        .select_from(Book)
+        .join(UserBookDownload)
+        .join(User)
+        .where(User.id == id)
+        .group_by(UserBookDownload.dt_record, Book.id)
+    ).one_or_none()
+    if book_count is None:
+        book_count = 0
+    print(limit)
+    max_offset = max(math.ceil(float(book_count / limit)) - 1, 0)
+    return {"total_books": book_count, "max_offset": max_offset, "books": books}
 
 
-def update_user_profile(username: str, book_id: int, session: Session):
-    user = session.get(User, username)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+def get_user_download_count(id: UUID, session: Session):
+    count = session.exec(
+        select(func.count())
+        .select_from(Book)
+        .join(UserBookDownload)
+        .join(User)
+        .where(User.id == id)
+        .group_by(UserBookDownload.dt_record, Book.id)
+    ).one_or_none()
+    if count is None:
+        count = 0
+    return count
 
-    book = session.get(Book, book_id)
-    if not book:
-        raise HTTPException(status_code=404, detail="Book not found")
 
-    user_books = list(get_books_by_user(username, None, None, session))
-    if book in user_books:
-        user_books.remove(book)
-
-    if isinstance(user.profile, list):
-        user.profile = np.array(user.profile)
-    if isinstance(book.embedding, list):
-        book.embedding = np.array(book.embedding)
-
-    if user.profile is None:
-        user.profile = book.embedding
+def update_user_profile(
+    profile: np.ndarray | None, embedding: np.ndarray, download_num: int
+):
+    if profile is None:
+        new_profile = embedding
     else:
-        user.profile = (user.profile * len(user_books) + book.embedding) / (
-            len(user_books) + 1
-        )
+        new_profile = (profile * download_num + embedding) / (download_num + 1)
 
-    session.add(user)
-    session.commit()
-    return user
+    return new_profile
 
 
-def add_user_download(username: str, book_id: int, session: Session):
-    user = session.get(User, username)
+def add_user_download(id: UUID, book_id: int, session: Session):
+    user = session.get(User, id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -161,10 +169,24 @@ def add_user_download(username: str, book_id: int, session: Session):
 
     record_datetime = datetime.now()
     user_download = UserBookDownload(
-        username=username, book_id=book_id, dt_record=record_datetime
+        user_id=id, book_id=book_id, dt_record=record_datetime
     )
     response = user_download.model_dump()
     session.add(user_download)
+    profile = (
+        np.array(user.profile)
+        if isinstance(user.profile, list)
+        else user.profile
+    )
+    embedding = (
+        np.array(book.embedding)
+        if isinstance(book.embedding, list)
+        else book.embedding or np.ndarray([])
+    )
+    download_num = get_user_download_count(user.id, session) - 1
+    new_profile = update_user_profile(profile, embedding, download_num)
+    user.profile = new_profile
+    session.add(user)
     session.commit()
     session.refresh(user_download)
     return response
@@ -183,8 +205,8 @@ def rerank_books(query: list[Book], response: list[Book], limit: int):
     return reranked_response[:limit]
 
 
-def get_user_book_recommmendations(username: str, limit: int, session: Session):
-    user = session.get(User, username)
+def get_user_book_recommmendations(id: UUID, limit: int, session: Session):
+    user = session.get(User, id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -192,6 +214,12 @@ def get_user_book_recommmendations(username: str, limit: int, session: Session):
         select(Book)
         .order_by(Book.embedding.cosine_distance(user.profile))  # ty:ignore[possibly-missing-attribute]
         .limit(limit + 50)
-    )
-    user_downloads = get_books_by_user(username, None, None, session)
-    return rerank_books(user_downloads, list(recommendations), limit)
+    ).all()
+    user_downloads = get_books_by_user(
+        id, 0, max(get_user_download_count(id, session), 1), session
+    ).get("books")
+    recommendations = [
+        BookRead.model_validate(book)
+        for book in rerank_books(user_downloads, list(recommendations), limit)
+    ]
+    return recommendations

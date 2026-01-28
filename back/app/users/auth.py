@@ -28,7 +28,7 @@ async def login_for_access_token(
         days=config.settings.ACCESS_TOKEN_EXPIRE_DAYS
     )
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.email}, expires_delta=access_token_expires
     )
     user_read = UserRead.model_validate(user)
     return Token(access_token=access_token, token_type="bearer", user=user_read)

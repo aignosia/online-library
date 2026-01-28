@@ -11,7 +11,6 @@ from app.users.services import (
     get_books_by_user,
     get_current_active_user,
     get_user_book_recommmendations,
-    update_user_profile,
 )
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -29,23 +28,24 @@ async def read_users_me(
     return current_user
 
 
-@router.get("/me/books", response_model=list[BookRead])
+@router.get("/me/books")
 async def read_own_book_downloads(
     current_user: Annotated[User, Depends(get_current_active_user)],
     session: SessionDep,
-    offset: int | None = None,
-    limit: Annotated[int | None, Query(le=100)] = None,
+    offset: int = 0,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
-    return get_books_by_user(current_user.username, offset, limit, session)
+    print(limit)
+    return get_books_by_user(current_user.id, offset, limit, session)
 
 
 @router.get("/me/books/recommendations", response_model=list[BookRead])
 async def read_own_book_recommendations(
     current_user: Annotated[User, Depends(get_current_active_user)],
     session: SessionDep,
-    limit: Annotated[int, Query(le=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
-    return get_user_book_recommmendations(current_user.username, limit, session)
+    return get_user_book_recommmendations(current_user.id, limit, session)
 
 
 @router.post("/me/books/{id}")
@@ -54,6 +54,5 @@ async def add_own_book_download(
     current_user: Annotated[User, Depends(get_current_active_user)],
     session: SessionDep,
 ):
-    user_download = add_user_download(current_user.username, id, session)
-    update_user_profile(current_user.username, id, session)
+    user_download = add_user_download(current_user.id, id, session)
     return user_download
