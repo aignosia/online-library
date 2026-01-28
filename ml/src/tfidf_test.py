@@ -6,7 +6,9 @@ import typer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def process_data(model_path: str, data_path: str, book_id: int):
+def process_data(
+    model_path: str, data_path: str, rec_number: int, book_id: int
+):
     print("Loading data...")
     df = pd.read_csv(data_path)
     df["authors"] = (
@@ -30,13 +32,15 @@ def process_data(model_path: str, data_path: str, book_id: int):
     df["cosine_sim"] = cosine_similarity(book_vector, tfidf_matrix).flatten()
     print("Sorting recommandations...")
     recommendations = df.sort_values(by="cosine_sim", ascending=False).iloc[
-        1:11
+        1 : rec_number + 1
     ]
     return df.iloc[[book_id]], recommendations
 
 
-def main(model_path: str, data_path: str, book_id: int):
-    book, recommendations = process_data(model_path, data_path, book_id)
+def main(model_path: str, data_path: str, rec_number: int, book_id: int):
+    book, recommendations = process_data(
+        model_path, data_path, rec_number, book_id
+    )
     print(f"Book:\n{book[['authors', 'title']]}")
     print(f"Recommendations:\n{recommendations[['authors', 'title']]}")
 
