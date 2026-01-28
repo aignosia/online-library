@@ -49,24 +49,44 @@ function App() {
             path="/history"
             element={
               <BookListingPage
+                key="history"
                 title="Historique"
-                route="users/me/books?limit=20"
+                route="users/me/books"
                 authorization={true}
+                hasPagination={true}
               />
             }
           />
           <Route
             path="/main-category/:id"
-            element={<BookListingPage authorization={false} />}
+            element={
+              <BookListingPage
+                key="main-cat"
+                authorization={false}
+                hasPagination={true}
+              />
+            }
           ></Route>
           <Route
             path="/category/:id"
-            element={<BookListingPage authorization={false} />}
+            element={
+              <BookListingPage
+                key="cat"
+                authorization={false}
+                hasPagination={true}
+              />
+            }
           ></Route>
           <Route path="/book/:id" element={<BookInfoPage />}></Route>
           <Route
             path="/search"
-            element={<BookListingPage authorization={false} />}
+            element={
+              <BookListingPage
+                key="search"
+                authorization={false}
+                hasPagination={true}
+              />
+            }
           ></Route>
         </Routes>
       </AuthProvider>

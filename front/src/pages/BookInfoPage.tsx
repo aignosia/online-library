@@ -68,12 +68,15 @@ export default function BookInfoPage() {
         method: "GET",
       });
       setBook(fetchedBook);
-      const similarBookNum = 60;
-      const fetchedSimilarBooks = await apiClient.request(
+      const showedSimilarBook = 12;
+      const similarBookNum = showedSimilarBook * 5;
+      const data = await apiClient.request(
         `books/${id}/recommendations?limit=${similarBookNum}`,
       );
-      const start = Math.floor(Math.random() * (similarBookNum - 6));
-      const end = start + 12;
+      const fetchedSimilarBooks = data.books;
+      let end = Math.floor(Math.random() * similarBookNum);
+      if (end < showedSimilarBook) end = showedSimilarBook;
+      const start = end - showedSimilarBook;
       setSimilarBooks(fetchedSimilarBooks.slice(start, end));
     };
     fetchData();
@@ -118,25 +121,25 @@ export default function BookInfoPage() {
               />
             </div>
             <div className="pt-10 flex flex-col gap-2 wrap-break-word">
-              <span className="font-bold">Résumé :</span>
+              <span className="font-bold">Summary:</span>
               <p className="whitespace-pre-wrap wrap-break-word">
                 {book?.summary}
               </p>
             </div>
             {book?.serie ? <p>Serie: {book?.serie?.name}</p> : <></>}
             <p>
-              <span className="font-bold">Catégorie(s) :</span>{" "}
+              <span className="font-bold">Categorie(s) :</span>{" "}
               {book?.subclasses.map((sc) => sc.name).join(", ") || "N/a"}
             </p>
             <p>
               <span className="font-bold">ISBN :</span> {book?.isbn || "N/a"}
             </p>
             <p>
-              <span className="font-bold">Langue :</span>{" "}
+              <span className="font-bold">Language :</span>{" "}
               {book?.language_code || "N/a"}
             </p>
             <p>
-              <span className="font-bold">Mots clés :</span>{" "}
+              <span className="font-bold">Keywords :</span>{" "}
               {book?.subjects.map((s) => s.name).join(", ") || "N/a"}
             </p>
             {book?.notes && (
@@ -152,7 +155,7 @@ export default function BookInfoPage() {
           </div>
         </div>
         <div className="flex flex-col w-full py-10">
-          <h1 className="font-bold text-2xl py-5">Livres similaires</h1>
+          <h1 className="font-bold text-2xl py-5">Similar Books</h1>
           <div className="w-full grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-5">
             {similarBooks.map((it) => {
               const authorsString = it.authors

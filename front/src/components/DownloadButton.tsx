@@ -97,7 +97,7 @@ export default function DownloadButton(props: DownloadButtonProps) {
           ) : (
             <HiDownload size={18} />
           )}
-          <span className="font-medium">Télécharger</span>
+          <span className="font-medium">Download</span>
         </div>
         <HiChevronDown
           className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}

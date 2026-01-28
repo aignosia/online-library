@@ -31,7 +31,7 @@ export default function LoginPage(props: LoginPageProps) {
           <Button
             color="#f4b759"
             hoverColor="#f2a73e"
-            content={props.type == "login" ? "Créer un compte" : "Connexion"}
+            content={props.type == "login" ? "Sign up" : "Sign in"}
             onClick={props.type == "login" ? navigateToSignUp : navigateToLogin}
           />
         </div>
