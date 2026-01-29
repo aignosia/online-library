@@ -11,10 +11,31 @@ with open("src/loc_classification.json", "r") as f:
 
 
 def get_fields_value(fields_list: list[Field]) -> list[str]:
+    """
+    Extracts the raw text value from a list of MARC fields.
+
+    Args:
+        fields_list: List of pymarc Field objects.
+
+    Returns:
+        A list of strings representing the field values.
+    """
     return list(map(lambda x: x.value(), fields_list))
 
 
 def get_book_authors(record: Record):
+    """
+    Extracts and processes authors from a MARC record.
+
+    Parses tags 100, 110, 111, and 700 to extract name, first name,
+    lifespans, and fuller name. Also handles entity caching.
+
+    Args:
+        record: The MARC Record object to analyze.
+
+    Returns:
+        A list of Author objects.
+    """
     authors_fields = record.get_fields("100", "110", "111", "700")
 
     authors = []
@@ -51,6 +72,15 @@ def get_book_authors(record: Record):
 
 
 def get_book_publisher(record: Record):
+    """
+    Extracts the publisher from a MARC record.
+
+    Args:
+        record: The MARC record.
+
+    Returns:
+        A Publisher object or None if no information is found.
+    """
     publisher_name = re.sub(r"[^a-zA-ZÀ-ÿ\s\-]", "", record.publisher)
     if not publisher_name:
         return {"publisher": None}
@@ -59,6 +89,15 @@ def get_book_publisher(record: Record):
 
 
 def get_book_subjects(record: Record):
+    """
+    Extracts subjects (keywords) from a MARC record via tag 653.
+
+    Args:
+        record: The MARC record.
+
+    Returns:
+        A list of Subject objects.
+    """
     subject_names = get_fields_value(record.get_fields("653"))
     subjects = []
     for subject_name in subject_names:
@@ -68,6 +107,15 @@ def get_book_subjects(record: Record):
 
 
 def get_book_serie(record: Record):
+    """
+    Extracts the collection/series from a MARC record via tag 490.
+
+    Args:
+        record: The MARC record.
+
+    Returns:
+        A Serie object or None.
+    """
     serie_field = next(iter(record.get_fields("490")), None)
     if not serie_field:
         return {"serie": None}
@@ -78,6 +126,16 @@ def get_book_serie(record: Record):
 
 
 def get_book_subclasses(codes: list[str], mapping: Any):
+    """
+    Maps classification codes (LOC) to Subclass objects.
+
+    Args:
+        codes: List of extracted classification codes (tag 050).
+        mapping: Mapping dictionary loaded from JSON.
+
+    Returns:
+        A list of Subclass objects associated with their respective BookClass.
+    """
     classes = []
     subclasses = []
     class_name = None
@@ -101,7 +159,7 @@ def get_book_subclasses(codes: list[str], mapping: Any):
             code = code[0]
 
         if len(code) > 2:
-            code = code[:-1]
+            code = code[:2]
 
         for subclass_mapping in subclasses_mapping:
             subclass_name = subclass_mapping.get("name")
@@ -116,6 +174,12 @@ def get_book_subclasses(codes: list[str], mapping: Any):
 
 
 def write_book_to_file(record: Record):
+    """
+    Processes a MARC record and appends the extracted book data to a CSV file.
+
+    Args:
+        record: The MARC record being processed.
+    """
     id = record.get_fields("001")[0].value()
 
     title = record.title

@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "../services/api";
 import { useNavigate } from "react-router";
+import useHandleOutsideClick from "../hooks/useHandleOutsideClick";
 
-export default function SearchBar() {
+interface SearchBarProps {
+  autoFocus?: boolean;
+}
+
+export default function SearchBar(props: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const suggestionsRef = useHandleOutsideClick(() => setShowSuggestions(false));
 
   const navigate = useNavigate();
 
@@ -30,7 +36,7 @@ export default function SearchBar() {
 
   const handleSearchAction = (value: string) => {
     navigate(
-      `/search?name=${encodeURIComponent(`Recherche : ${value}`)}&route=${encodeURIComponent(`books/search?q=${value}`)}`,
+      `/search?name=${encodeURIComponent(`Search: ${value}`)}&route=${encodeURIComponent(`books/search?q=${value}`)}`,
     );
   };
 
@@ -49,13 +55,17 @@ export default function SearchBar() {
       } else {
         handleSearchAction(query);
       }
+      setShowSuggestions(false);
     } else if (e.key === "Escape") {
       setShowSuggestions(false);
     }
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto flex">
+    <div
+      ref={suggestionsRef}
+      className="relative w-full max-w-2xl mx-auto flex"
+    >
       <div className="absolute transform translate-y-1/3 translate-x-2 pointer-events-none text-[#C7C6CB] z-10">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +84,9 @@ export default function SearchBar() {
       </div>
       <input
         type="text"
-        placeholder="Rechercher..."
+        name="search"
+        placeholder="Search"
+        autoFocus={props.autoFocus || false}
         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 "
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -87,7 +99,7 @@ export default function SearchBar() {
             <li
               key={index}
               onClick={() => {
-                handleOnKeyDown(item);
+                handleSearchAction(item);
               }}
               className={`p-2.5 cursor-pointer hover:bg-gray-200 ${index === selectedIndex && "bg-gray-200"}`}
             >

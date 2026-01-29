@@ -21,7 +21,11 @@ def create_publisher(publisher: PublisherCreate, session: SessionDep):
 
 
 @router.get("", response_model=list[PublisherRead])
-def read_publishers(session: SessionDep, offset: int = 0, limit: int = 10):
+def read_publishers(
+    session: SessionDep,
+    offset: int = 0,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
+):
     return get_publishers(offset, limit, session)
 
 
@@ -35,6 +39,6 @@ def read_books_by_publisher(
     id: int,
     session: SessionDep,
     offset: int = 0,
-    limit: Annotated[int, Query(le=100)] = 10,
+    limit: Annotated[int, Query(gt=0, le=100)] = 10,
 ):
     return get_books_by_publisher(id, offset, limit, session)

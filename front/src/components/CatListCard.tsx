@@ -17,7 +17,7 @@ export default function CatListCard(props: CatListProps) {
                 <Link
                   to={{
                     pathname: `/main-category/${cat.id}`,
-                    search: `?name=${encodeURIComponent(cat.name)}&route=${encodeURIComponent(`classes/${cat.id}/books?offset=0&limit=50`)}`,
+                    search: `?name=${encodeURIComponent(cat.name)}&route=${encodeURIComponent(`classes/${cat.id}/books`)}`,
                   }}
                 >
                   <CatCard content={cat.name} />

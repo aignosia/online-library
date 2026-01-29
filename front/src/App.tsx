@@ -5,8 +5,6 @@ import LoginPage from "./pages/LoginPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import BookListingPage from "./pages/BookListingPage";
 import { AuthProvider } from "./services/AuthProvider";
-import { apiClient } from "./services/api";
-import { useEffect, useState } from "react";
 import BookInfoPage from "./pages/BookInfoPage";
 
 export interface Author {
@@ -38,54 +36,58 @@ export interface Categorie {
 }
 
 function App() {
-  const [books, setBooks] = useState([]);
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setBooks(
-        await apiClient.request("books?limit=20", {
-          method: "GET",
-        }),
-      );
-      setCategories(
-        await apiClient.request("classes", {
-          method: "GET",
-        }),
-      );
-    };
-
-    fetchData();
-  }, []);
-
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Navigate to="/home" replace />}></Route>
-          <Route
-            path="/home"
-            element={<HomePage categories={categories} books={books} />}
-          />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage type="login" />} />
           <Route path="/signup" element={<LoginPage type="signup" />} />
-          <Route
-            path="/categories"
-            element={<CategoriesPage categories={categories} />}
-          />
+          <Route path="/categories" element={<CategoriesPage />} />
           <Route
             path="/history"
             element={
-              <BookListingPage title="Historique" route="books?limit=20" />
+              <BookListingPage
+                key="history"
+                title="History"
+                route="users/me/books"
+                authorization={true}
+                hasPagination={true}
+              />
             }
           />
           <Route
             path="/main-category/:id"
-            element={<BookListingPage />}
+            element={
+              <BookListingPage
+                key="main-cat"
+                authorization={false}
+                hasPagination={true}
+              />
+            }
           ></Route>
-          <Route path="/category/:id" element={<BookListingPage />}></Route>
+          <Route
+            path="/category/:id"
+            element={
+              <BookListingPage
+                key="cat"
+                authorization={false}
+                hasPagination={true}
+              />
+            }
+          ></Route>
           <Route path="/book/:id" element={<BookInfoPage />}></Route>
-          <Route path="/search" element={<BookListingPage />}></Route>
+          <Route
+            path="/search"
+            element={
+              <BookListingPage
+                key="search"
+                authorization={false}
+                hasPagination={true}
+              />
+            }
+          ></Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

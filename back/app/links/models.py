@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID
 
 from sqlmodel import Field, SQLModel
 
@@ -18,11 +19,9 @@ class BookSubjectLink(SQLModel, table=True):
 
 
 class UserBookDownload(SQLModel, table=True):
-    username: str = Field(
-        default=None, primary_key=True, foreign_key="user.username"
-    )
+    user_id: UUID = Field(default=None, primary_key=True, foreign_key="user.id")
     book_id: int = Field(default=None, primary_key=True, foreign_key="book.id")
-    dt_record: datetime
+    dt_record: datetime = Field(default=None, primary_key=True)
 
 
 class BookSubclassLink(SQLModel, table=True):

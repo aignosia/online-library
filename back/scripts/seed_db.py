@@ -1,7 +1,6 @@
-from pathlib import Path
-
 import typer
 
+from scripts.seed_book_embeddings import seed_book_embeddings
 from scripts.seed_books import seed_books
 from scripts.seed_default_user import seed_default_user
 
@@ -13,9 +12,14 @@ def run_seed_default_user():
     seed_default_user()
 
 
-def run_seed_books(file_path: Path):
+def run_seed_books(data: str):
     typer.echo("Inserting books...")
-    seed_books(file_path)
+    seed_books(data)
+
+
+def run_seed_book_embeddings(model: str):
+    typer.echo("Adding book embeddings...")
+    seed_book_embeddings(model)
 
 
 @app.command()
@@ -24,36 +28,44 @@ def run(
         "all",
         "--resource",
         "-r",
-        help="Resources can be : 'user', 'books', 'all'",
+        help="Resources can be : 'user', 'books', 'embeddings'",
     ),
-    file: str | None = typer.Option(
+    data: str | None = typer.Option(
         None,
-        "--file",
-        "-f",
+        "--data",
+        "-d",
         exists=True,
         file_okay=True,
         readable=True,
         help="Path to the MarcXML file containing the books to insert to the database (required for 'books')",
     ),
+    model: str | None = typer.Option(
+        None,
+        "--model",
+        "-m",
+        exists=True,
+        file_okay=True,
+        readable=True,
+        help="Path to the TF-IDF vectorizer file (required for 'embeddings')",
+    ),
 ):
     "Run database seed according to the resource selected"
-    typer.echo("Starting seeding 🚀")
+    typer.echo("Starting seeding")
     if resource == "user":
         run_seed_default_user()
     elif resource == "books":
-        if not file:
-            raise FileNotFoundError("Enter a valid file path.")
-        run_seed_books(Path(file))
-    elif resource == "all":
-        if not file:
-            raise FileNotFoundError("Enter a valid file path.")
-        run_seed_default_user()
-        run_seed_books(Path(file))
+        if not data:
+            raise FileNotFoundError("Enter a valid data source file path.")
+        run_seed_books(data)
+    elif resource == "embeddings":
+        if not model:
+            raise FileNotFoundError("Enter a valid model file path")
+        run_seed_book_embeddings(model)
     else:
         typer.echo(f"Error: uknown resource '{resource}'.", err=True)
         raise typer.Exit(code=1)
 
-    typer.echo("Seeding finished successfully! 🎉")
+    typer.echo("Seeding finished successfully!")
 
 
 if __name__ == "__main__":

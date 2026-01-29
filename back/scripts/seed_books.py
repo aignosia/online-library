@@ -1,6 +1,5 @@
 import json
 import re
-from pathlib import Path
 from typing import Any
 
 import typer
@@ -19,7 +18,6 @@ from app.subclasses.models import Subclass
 from app.subjects.models import Subject
 
 init_db()
-session = Session(engine)
 
 
 class Cache:
@@ -206,6 +204,16 @@ def get_book_subclasses(codes: list[str], mapping: Any) -> list[Subclass]:
             cache.bookclasses[bookclass_name] = BookClass(name=bookclass_name)
 
         subclasses_mapping = bookclass_mapping.get("subclasses")
+
+        if "." in code:
+            code = code.split(".")[0]
+
+        if code[1:].isnumeric():
+            code = code[0]
+
+        if len(code) > 2:
+            code = code[:2]
+
         for subclass_mapping in subclasses_mapping:
             subclass_name = subclass_mapping.get("name")
             if subclass_mapping.get("code") == code:
@@ -338,28 +346,24 @@ def insert_book_in_db(record: Record):
     )
 
     cache.books[id] = book
+    typer.echo(f"Treated books: {len(cache.books.keys())}\r", nl=False)
 
-    typer.echo(f"Processed books: {len(cache.books)}\r", nl=False)
 
-
-def seed_books(file_path: Path):
+def seed_books(data: str):
     """
     Main entry point for database seeding.
 
     Reads the XML file, processes records, adds objects to the session,
     and performs the final commit.
     """
-    if session.get(Book, 1):
-        typer.echo("Book seeding skipped: book table not empty")
-        return
+    with Session(engine) as session:
+        if session.get(Book, 1):
+            typer.echo("Book seeding skipped: book table not empty")
+            return
 
-    map_xml(insert_book_in_db, file_path)
-    typer.echo(f"Processed books: {len(cache.books)}")
-    typer.echo("Adding entries...")
-    session.add_all(cache.books.values())
-    typer.echo("Commiting entries...")
-    session.commit()
-
-
-if __name__ == "__main__":
-    seed_books(Path("downloads/pgmarcxml"))
+        map_xml(insert_book_in_db, data)
+        typer.echo(f"Treated books: {len(cache.books.keys())}")
+        typer.echo("Adding entries...")
+        session.add_all(cache.books.values())
+        typer.echo("Commiting entries...")
+        session.commit()
