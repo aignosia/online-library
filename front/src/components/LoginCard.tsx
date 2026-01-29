@@ -53,8 +53,8 @@ export default function LoginCard() {
 
       <form className="flex flex-col" onSubmit={handleSubmit}>
         <TextInput
-          placeholder="Enter Username"
-          type="text"
+          placeholder="Enter email"
+          type="email"
           name="username"
           autoComplete="username"
           onChange={handleInput}

@@ -98,7 +98,7 @@ export default function Header() {
             ref={searchRef}
             className="lg:hidden absolute w-[75%] bg-white z-30"
           >
-            <SearchBar />
+            <SearchBar autoFocus={true} />
           </div>
         ) : (
           <></>
@@ -135,7 +135,7 @@ export default function Header() {
                   to="/categories"
                   onClick={() => setIsMobileNavOpen(false)}
                 >
-                  Catégories
+                  Categories
                 </Link>
               </li>
               {auth.user ? (
