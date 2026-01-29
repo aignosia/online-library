@@ -95,7 +95,7 @@ export default function SignUpCard() {
 
       <form className="flex flex-col" onSubmit={handleSubmit}>
         <TextInput
-          placeholder="Enter Your Name"
+          placeholder="Enter your name"
           type="text"
           name="full_name"
           autoComplete="name"
@@ -103,8 +103,8 @@ export default function SignUpCard() {
         />
         <div className="h-6"></div>
         <TextInput
-          placeholder="Enter Username"
-          type="text"
+          placeholder="Enter email"
+          type="email"
           name="username"
           autoComplete="username"
           onChange={handleInput}

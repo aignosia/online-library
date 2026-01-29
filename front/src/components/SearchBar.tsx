@@ -3,7 +3,11 @@ import { apiClient } from "../services/api";
 import { useNavigate } from "react-router";
 import useHandleOutsideClick from "../hooks/useHandleOutsideClick";
 
-export default function SearchBar() {
+interface SearchBarProps {
+  autoFocus?: boolean;
+}
+
+export default function SearchBar(props: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
@@ -82,6 +86,7 @@ export default function SearchBar() {
         type="text"
         name="search"
         placeholder="Search"
+        autoFocus={props.autoFocus || false}
         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 "
         value={query}
         onChange={(e) => setQuery(e.target.value)}

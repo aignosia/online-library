@@ -50,7 +50,7 @@ function App() {
             element={
               <BookListingPage
                 key="history"
-                title="Historique"
+                title="History"
                 route="users/me/books"
                 authorization={true}
                 hasPagination={true}
