@@ -1,6 +1,6 @@
 # RecoMind
 
-**Website:** [recomind.netlify.app](recomind.netlify.app)
+**Website:** [https://recomind.netlify.app](https://recomind.netlify.app)
 
 **API SwaggerUI Documentation:** [https://recomind-api.onrender.com/docs](https://recomind-api.onrender.com/docs)
 
