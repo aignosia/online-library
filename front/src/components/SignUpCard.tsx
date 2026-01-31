@@ -6,19 +6,20 @@ import { AuthContext } from "../services/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function SignUpCard() {
-  const [input, setInput] = useState({
-    username: "",
-    full_name: "",
-    is_active: true,
-    password: "",
-  });
-  const [authData, setAuthData] = useState({
+  let authData = {
     username: "",
     password: "",
     grant_type: "password",
     scope: "",
     client_id: "",
     client_secret: "",
+  };
+
+  const [input, setInput] = useState({
+    email: "",
+    full_name: "",
+    is_active: true,
+    password: "",
   });
 
   const [errors, setErrors] = useState({
@@ -59,17 +60,17 @@ export default function SignUpCard() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
-      input.username !== "" &&
+      input.email !== "" &&
       input.full_name !== "" &&
       input.password !== "" &&
       input.password.length >= 8
     ) {
       const signupAction = async () => {
-        setAuthData((prev) => ({
-          ...prev,
-          username: input.username,
+        authData = {
+          ...authData,
+          username: input.email,
           password: input.password,
-        }));
+        };
         const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
           method: "POST",
           headers: {
@@ -105,7 +106,7 @@ export default function SignUpCard() {
         <TextInput
           placeholder="Enter email"
           type="email"
-          name="username"
+          name="email"
           autoComplete="username"
           onChange={handleInput}
         />

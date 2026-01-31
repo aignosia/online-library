@@ -13,13 +13,13 @@ if TYPE_CHECKING:
 
 
 class UserBase(SQLModel):
-    id: UUID = Field(default_factory=uuid4, primary_key=True)
     email: EmailStr = Field(unique=True, max_length=255)
     full_name: str | None = Field(default=None, max_length=255)
     is_active: bool | None = True
 
 
 class User(UserBase, table=True):
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
     hashed_password: str
     profile: Any | None = Field(default=None, sa_type=Vector(10000))
 
@@ -33,6 +33,7 @@ class UserCreate(UserBase):
 
 
 class UserRead(UserBase):
+    id: UUID
     pass
 
 
