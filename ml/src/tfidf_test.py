@@ -1,13 +1,16 @@
 import json
+from pathlib import Path
 
 import joblib
 import pandas as pd
-import typer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-def process_data(
-    model_path: str, data_path: str, rec_number: int, book_id: int
+def load_data(
+    model_path: Path,
+    data_path: Path,
+    rec_number: int,
+    book_id: int,
 ):
     print("Loading data...")
     df = pd.read_csv(data_path)
@@ -37,13 +40,14 @@ def process_data(
     return df.iloc[[book_id]], recommendations
 
 
-def main(model_path: str, data_path: str, rec_number: int, book_id: int):
-    book, recommendations = process_data(
+def test(
+    model_path: Path,
+    data_path: Path,
+    book_id: int,
+    rec_number,
+):
+    book, recommendations = load_data(
         model_path, data_path, rec_number, book_id
     )
     print(f"Book:\n{book[['authors', 'title']]}")
     print(f"Recommendations:\n{recommendations[['authors', 'title']]}")
-
-
-if __name__ == "__main__":
-    typer.run(main)

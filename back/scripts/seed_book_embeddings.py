@@ -4,12 +4,13 @@ from sqlmodel import Session, select
 
 from app.books.models import Book
 from app.books.services import get_book_tfidf_text
+from app.config.config import settings
 from app.config.db import engine
 
 
-def seed_book_embeddings(model: str):
+def seed_book_embeddings():
     with Session(engine) as session:
-        tfidf = joblib.load(model)
+        tfidf = joblib.load(settings.RECOMMENDATION_MODEL_FILE)
         batch_size = 10000
         statement = select(Book).execution_options(yield_per=batch_size)
         treated_books = 0
