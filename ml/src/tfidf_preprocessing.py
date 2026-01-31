@@ -1,11 +1,11 @@
 import json
 import re
+from pathlib import Path
 
 import fugashi
 import jieba
 import pandas as pd
 import tltk
-import typer
 from konlpy.tag import Kkma
 from stop_words import safe_get_stop_words
 from tqdm import tqdm
@@ -62,9 +62,9 @@ def create_tfidf_text(row: pd.Series):
     return text
 
 
-def main(out: str, path: str, size: int | None = None):
+def preprocess(out: Path, data_source: Path, size: int | None = None):
     print("Reading dataset...")
-    df = pd.read_csv(path)
+    df = pd.read_csv(data_source)
 
     if size and size >= 0:
         df = pd.DataFrame(df.iloc[:size])
@@ -75,7 +75,3 @@ def main(out: str, path: str, size: int | None = None):
 
     print(f"Writing to {out}...")
     df.to_csv(out, index=False)
-
-
-if __name__ == "__main__":
-    typer.run(main)
