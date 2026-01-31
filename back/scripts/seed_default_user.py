@@ -32,7 +32,3 @@ def seed_default_user():
         typer.echo("Default user seeding skipped: user already exists")
     else:
         add_user(default_user, session)
-
-
-if __name__ == "__main__":
-    seed_default_user()

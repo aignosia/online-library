@@ -6,6 +6,7 @@ import fugashi
 import jieba
 import pandas as pd
 import tltk
+import typer
 from konlpy.tag import Kkma
 from stop_words import safe_get_stop_words
 from tqdm import tqdm
@@ -63,7 +64,7 @@ def create_tfidf_text(row: pd.Series):
 
 
 def preprocess(out: Path, data_source: Path, size: int | None = None):
-    print("Reading dataset...")
+    typer.echo("Reading dataset...")
     df = pd.read_csv(data_source)
 
     if size and size >= 0:
@@ -73,5 +74,5 @@ def preprocess(out: Path, data_source: Path, size: int | None = None):
         df.fillna("").astype(str).progress_apply(create_tfidf_text, axis=1)
     )
 
-    print(f"Writing to {out}...")
+    typer.echo(f"Writing to {out}...")
     df.to_csv(out, index=False)
