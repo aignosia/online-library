@@ -289,7 +289,7 @@ def get_book_files_locations(url: str, book_id: int) -> list[File]:
     return locations
 
 
-def insert_book_in_db(record: Record):
+def insert_book_in_db(record: Record, booknum: int | None):
     """
     Transforms a MARC record into a Book object and adds it to the cache.
 
@@ -300,6 +300,8 @@ def insert_book_in_db(record: Record):
     Args:
         record: The MARC record being processed.
     """
+    if booknum and len(cache.books) >= booknum:
+        return
     id = record.get_fields("001")[0].value()
 
     title = record.title
@@ -349,7 +351,7 @@ def insert_book_in_db(record: Record):
     typer.echo(f"Treated books: {len(cache.books.keys())}\r", nl=False)
 
 
-def seed_books(data: str):
+def seed_books(data: str, booknum: int | None):
     """
     Main entry point for database seeding.
 
@@ -361,7 +363,7 @@ def seed_books(data: str):
             typer.echo("Book seeding skipped: book table not empty")
             return
 
-        map_xml(insert_book_in_db, data)
+        map_xml(lambda x: insert_book_in_db(x, booknum), data)
         typer.echo(f"Treated books: {len(cache.books.keys())}")
         typer.echo("Adding entries...")
         session.add_all(cache.books.values())
