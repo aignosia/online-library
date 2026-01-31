@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Optional
 
-from pgvector.sqlalchemy import Vector
+from pgvector.sqlalchemy import SPARSEVEC
 from sqlmodel import JSON, Column, Field, Relationship, SQLModel
 
 from app.links.models import (
@@ -36,7 +36,7 @@ class BookBase(SQLModel):
 
 class Book(BookBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    embedding: Any | None = Field(default=None, sa_type=Vector(10000))
+    embedding: Any | None = Field(default=None, sa_type=SPARSEVEC(5000))
 
     publisher: Optional["Publisher"] = Relationship(back_populates="books")
     serie: Optional["Serie"] = Relationship(back_populates="books")
