@@ -4,19 +4,32 @@
 
 **API SwaggerUI Documentation:** [https://recomind-api.onrender.com/docs](https://recomind-api.onrender.com/docs)
 
-This project is an online library with a book recommendation system. It is a
-full stack app with React.js and TailwindCSS for the frontend, FastAPI for the
-backend, PostgreSQL for the database, and it uses a self-trained ML model for the
-recommendation system (the model is not yet ready). The book database used is
-the [Project Gutenberg](https://www.gutenberg.org) MarcXML catalog.
+RecoMind is a full-stack online library application created to be simple and to
+help the user find books that fit his/her interests.
+
+## Tech Stack
+
+* **Frontend**: React.js & Tailwind CSS.
+* **Backend**: FastAPI.
+* **Database**: PostgreSQL with pgvector extension.
+* **Machine Learning**: A custom recommendation system using content-based
+  filtering.
+
+## Data Source
+
+The application uses the Project Gutenberg MarcXML catalog to seed the database.
 
 ## Install
 
 ### Prerequisites
   
-* Python 3.11 (preferred especially for the ML part) or above
-* Node.js v24.11.0
-* PostgreSQL
+* Python 3.11 (preferred) or above
+* Node.js v24.11.0 or above
+* PostgreSQL 17 or above
+* pgvector 0.7.0 or above
+
+**Note:** If you don't use uv just replace `uv run` by `python` unless specified
+otherwise.
 
 ### Cloning the repo
 
@@ -24,96 +37,109 @@ the [Project Gutenberg](https://www.gutenberg.org) MarcXML catalog.
 git clone https://github.com/aignosia/online-library.git
 ```
 
+### Machine Learning
+
+```bash
+# Enter the ml directory
+cd ml
+
+# Create a virtual environment
+# For uv
+uv venv
+# For other Python installation
+python -m venv venv
+
+# Activate the virtual environment
+source .venv/bin/activate # for MacOS or Linux
+.venv\Scripts\activate # for Windows
+
+# Install the requirements packages
+# For uv
+uv sync
+# For other Python installation
+python -m pip install -r requirements.txt
+
+# Convert MarcXML data to a CSV dataset
+uv run -m src.data_preprocessing --output /path/to/output/file /path/to/source/file
+
+# Preprocess the dataset for TF-IDF
+uv run -m src.tfidf preprocess --output /path/to/output/file /path/to/source/file
+
+# Train the TF-IDF vectorizer and export to a joblib file
+uv run -m src.tfidf train --output /path/to/output/file /path/to/source/file
+
+# To test the trained TF-IDF vectorizer
+uv run -m src.tfidf test --model /path/to/model/file --data /path/to/data/file book_id
+```
+
 ### Backend Configuration
 
-* Using uv
+```bash
+# Enter the back directory
+cd back
 
-  ```bash
-  # Enter the back directory
-  cd back
-  # Create a virtual environment
-  uv venv 
-  # Although uv use the created virtual environment by default to install package,
-  # if you want to activate the virtual environment to make its packages available,
-  # use these commands :
-  source .venv/bin/activate # for MacOS or Linux
-  .venv\Scripts\activate # for Windows
-  # Install the requirements packages
-  uv pip install -r requirements.txt
-  # Copy the .env.example file to .env and replace default entries by your own configuration
-  cp .env.example .env
-  # run the app
-  uv run fastapi dev 
-  ```
+# Create a virtual environment
+# For uv
+uv venv
+# For other Python installation
+python -m venv venv
 
-* Using other Python installation (eg. Pyenv)
+# Activate virtual environment
+source .venv/bin/activate # for MacOS or Linux
+.venv\Scripts\activate # for Windows
 
-  ```bash
-  # Create virtual environment
-  python -m venv venv
-  # Activate virtual environment
-  source .venv/bin/activate # for MacOS or Linux
-  .venv\Scripts\activate # for Windows
-  # Install the requirements packages
-  pip install -r requirements.txt
-  # Copy the .env.example file to .env and replace default entries by your own configuration
-  cp .env.example .env
-  # run the app
-  fastapi dev
-  ```
+# Install the requirements packages
+# For uv
+uv sync
+# For other Python installation
+python -m pip install -r requirements.txt
+
+# Copy the .env.example file to .env and replace default entries by your
+# own configuration
+cp .env.example .env
+
+# Run the app
+# For uv
+uv run fastapi dev 
+# For other python installation
+fastapi dev app/main.py
+```
 
 ### Frontend Configuration
 
-  ```bash
-  # Enter the front directory
-  cd front
-  # Install packages
-  npm install
-  # Copy the .env.example file to .env.local and replace default entries by your
-  # own configuration
-  cp .env.example .env.local
-  # Run app
-  npm run dev
-  ```
+```bash
+# Enter the front directory
+cd front
+
+# Install packages
+npm install
+
+# Copy the .env.example file to .env.local and replace default entries by your
+# own configuration
+cp .env.example .env.local
+
+# Run app
+npm run dev
+```
 
 ### Database Seeding
 
-  ```bash
-  # Download Project Gutenberg MarcXML catalog (wget recommended)
-  wget -P path/to/you/directory https://www.gutenberg.org/cache/epub/feeds/pgmarc.xml
-  # Enter the back directory
-  cd back
-  # To seed the default user
-  uv run -m scripts.seed_db.py --user # if using uv
-  python -m scripts.seed_db.py --user # for other python installation
-  # To seed the books
-  uv run -m scripts.seed_db.py --books --file /path/to/your/file # or
-  python -m scripts.seed_db.py --books --file /path/to/your/file
-  # To seed both
-  uv run -m scripts.seed_db.py --all --file /path/to/your/file # or
-  python -m scripts.seed_db.py --all --file /path/to/your/file
-  ```
+```bash
+# Download Project Gutenberg MarcXML catalog (wget recommended)
+wget -P path/to/your/directory https://www.gutenberg.org/cache/epub/feeds/pgmarc.xml
 
-### Machine Learning
+# Enter the back directory
+cd back
 
-* The ML model is not ready yet, but you can open the `eda.py` file in an
-  editor that support Jupytext syntax if you are interested in my data
-  analysis process. You can also convert it to a Jupyter notebook file using
-  Jupytext or another tool if you prefer notebook view.
+# To seed the default user
+uv run -m scripts.seed user
 
-* But before running it, you need to run the `data_preparation.py` script to
-  get the data used in the analysis. To run the `data_preparation.py` script,
-  follow these steps:
+# To seed the books
+uv run -m scripts.seed books --source /path/to/your/marcxml/file 
 
-  ```bash
-  # Enter the ml directory
-  cd ml
-  # Create data directory and copy your MarcXML file inside
-  # There is no option to specify custom filename yet
-  mkdir data && cp path/to/you/file ./data/pgmarc.xml 
-  # Run data conversion pipeline
-  python -m src.data_preparation.py
-  ```
+# To seed book embeddings
+uv run -m scripts.seed embeddings
+```
 
 ## Usage
 

@@ -351,7 +351,7 @@ def insert_book_in_db(record: Record, booknum: int | None):
     typer.echo(f"Treated books: {len(cache.books.keys())}\r", nl=False)
 
 
-def seed_books(data: str, booknum: int | None):
+def seed_books(source_file: str, booknum: int | None):
     """
     Main entry point for database seeding.
 
@@ -363,7 +363,7 @@ def seed_books(data: str, booknum: int | None):
             typer.echo("Book seeding skipped: book table not empty")
             return
 
-        map_xml(lambda x: insert_book_in_db(x, booknum), data)
+        map_xml(lambda x: insert_book_in_db(x, booknum), source_file)
         typer.echo(f"Treated books: {len(cache.books.keys())}")
         typer.echo("Adding entries...")
         session.add_all(cache.books.values())

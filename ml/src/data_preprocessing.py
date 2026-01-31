@@ -1,10 +1,13 @@
 import json
-import os
 import re
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import typer
 from pymarc import Field, Record, map_xml
+
+app = typer.Typer()
 
 with open("src/loc_classification.json", "r") as f:
     class_mapping = json.load(f)
@@ -173,7 +176,7 @@ def get_book_subclasses(codes: list[str], mapping: Any):
     }
 
 
-def write_book_to_file(record: Record):
+def write_book_to_file(record: Record, output: Path):
     """
     Processes a MARC record and appends the extracted book data to a CSV file.
 
@@ -219,22 +222,30 @@ def write_book_to_file(record: Record):
 
     df = pd.DataFrame([book])
 
-    df.to_csv("data/pg_books.csv", mode="a", index=False, header=False)
-    print(f"Processed book: {id}")
+    df.to_csv(output, mode="a", index=False, header=False)
+    typer.echo(f"Processed book: {id}")
 
 
-def write_data():
-    if os.path.exists("data/pg_books.csv"):
-        with open("data/pg_books.csv", "w") as f:
-            f.write("")
-    map_xml(write_book_to_file, "data/pgmarc.xml")
+@app.command()
+def process_data(
+    output: Path = typer.Option(
+        ..., "--output", "-o", help="Path to the output file (CSV)"
+    ),
+    source: Path = typer.Argument(
+        help="Path to the source file (MarcXML)",
+        exists=True,
+        file_okay=True,
+        readable=True,
+    ),
+):
+    """Preprocess books data from a MarcXML source file to a CSV dataset."""
+    typer.echo("Starting preprocessing...")
+    with open(output, "w") as f:
+        f.write("")
+    map_xml(lambda x: write_book_to_file(x, output), source)
 
-
-if __name__ == "__main__":
-    print("Starting...")
-    write_data()
-    print("Add columns...")
-    df = pd.read_csv("data/pg_books.csv", header=None)
+    typer.echo("Adding columns...")
+    df = pd.read_csv(output, header=None)
     df.columns = [
         "id",
         "title",
@@ -250,4 +261,9 @@ if __name__ == "__main__":
         "subclasses",
     ]
 
-    df.to_csv("data/pg_books.csv", index=False)
+    df.to_csv(output, index=False)
+    typer.echo("Preprocessing finished successfully!")
+
+
+if __name__ == "__main__":
+    app()
