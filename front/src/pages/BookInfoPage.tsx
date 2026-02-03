@@ -171,7 +171,7 @@ export default function BookInfoPage() {
                   id={it.id}
                   title={it.title}
                   author={authorsString}
-                  cover={it.cover}
+                  cover={it.cover || ""}
                 />
               );
             })}

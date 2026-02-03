@@ -22,7 +22,7 @@ export default function BookList(props: BookListProps) {
         id={it.id}
         title={it.title}
         author={authorsString}
-        cover={it.cover}
+        cover={it.cover || ""}
       />
     );
   });
