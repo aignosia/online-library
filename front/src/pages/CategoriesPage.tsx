@@ -18,7 +18,7 @@ export default function CategoriesPage() {
       setCategories(fetchedCategories);
     };
     fetchData();
-  });
+  }, []);
   return (
     <div className="h-screen flex flex-col bg-[#f8f5f1] overflow-y-hidden">
       <Header />

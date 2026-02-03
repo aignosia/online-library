@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any
 from uuid import UUID, uuid4
 
-from pgvector.sqlalchemy import Vector
+from pgvector.sqlalchemy import SPARSEVEC
 from pydantic import BaseModel, EmailStr
 from sqlmodel import Field, SQLModel
 from sqlmodel.main import Relationship
@@ -21,7 +21,7 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     hashed_password: str
-    profile: Any | None = Field(default=None, sa_type=Vector(10000))
+    profile: Any | None = Field(default=None, sa_type=SPARSEVEC(5000))
 
     books: list["Book"] = Relationship(
         back_populates="users", link_model=UserBookDownload

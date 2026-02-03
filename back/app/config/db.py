@@ -5,7 +5,9 @@ from sqlmodel import Session, SQLModel, create_engine
 
 from app.config.config import settings
 
-engine = create_engine(settings.DATABASE_URI)
+engine = create_engine(
+    settings.DATABASE_URI, connect_args={"connect_timeout": 60}
+)
 
 
 def init_db():
