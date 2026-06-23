@@ -2,17 +2,17 @@
 
 **Website:** [https://recomind.netlify.app](https://recomind.netlify.app)
 
-**API SwaggerUI Documentation:** [https://recomind-api.onrender.com/docs](https://recomind-api.onrender.com/docs)
+**API SwaggerUI Documentation:** [https://recomind.fastapicloud.dev/docs](https://recomind-api.onrender.com/docs)
 
 RecoMind is a full-stack online library application created to be simple and to
 help the user find books that fit his/her interests.
 
 ## Tech Stack
 
-* **Frontend**: React.js & Tailwind CSS.
-* **Backend**: FastAPI.
-* **Database**: PostgreSQL with pgvector extension.
-* **Machine Learning**: A custom recommendation system using content-based
+- **Frontend**: React.js & Tailwind CSS.
+- **Backend**: FastAPI.
+- **Database**: PostgreSQL with pgvector extension.
+- **Machine Learning**: A custom recommendation system using content-based
   filtering.
 
 ## Data Source
@@ -22,11 +22,11 @@ The application uses the Project Gutenberg MarcXML catalog to seed the database.
 ## Install
 
 ### Prerequisites
-  
-* Python 3.11 (preferred) or above
-* Node.js v24.11.0 or above
-* PostgreSQL 17 or above
-* pgvector 0.7.0 or above
+
+- Python 3.11 (preferred) or above
+- Node.js v24.11.0 or above
+- PostgreSQL 17 or above
+- pgvector 0.7.0 or above
 
 **Note:** If you don't use uv just replace `uv run` by `python` unless specified
 otherwise.
@@ -100,7 +100,7 @@ cp .env.example .env
 
 # Run the app
 # For uv
-uv run fastapi dev 
+uv run fastapi dev
 # For other python installation
 fastapi dev app/main.py
 ```
@@ -135,7 +135,7 @@ cd back
 uv run -m scripts.seed user
 
 # To seed the books
-uv run -m scripts.seed books --source /path/to/your/marcxml/file 
+uv run -m scripts.seed books --source /path/to/your/marcxml/file
 
 # To seed book embeddings
 uv run -m scripts.seed embeddings
@@ -143,10 +143,10 @@ uv run -m scripts.seed embeddings
 
 ## Usage
 
-* Frontend: `http://localhost:5173`
-* API documentation:
-  * Swagger: `http://localhost:8000/docs`
-  * Redoc: `http://localhost:8000/redoc`
+- Frontend: `http://localhost:5173`
+- API documentation:
+  - Swagger: `http://localhost:8000/docs`
+  - Redoc: `http://localhost:8000/redoc`
 
 ## License
 
