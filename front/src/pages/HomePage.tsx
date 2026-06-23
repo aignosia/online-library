@@ -14,34 +14,52 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let timeoutId: number;
     const fetchData = async () => {
-      const limit = 20;
-      let endpoint = "";
-      if (auth.user) {
-        endpoint = `users/me/books/recommendations?limit=${limit}`;
-        setBooks(
-          await apiClient.request(endpoint, {
+      timeoutId = window.setTimeout(() => {
+        console.log("The database seems to be idle...");
+      }, 3000);
+      try {
+        const limit = 20;
+        let endpoint = "";
+        const promises = [];
+        if (auth.user) {
+          endpoint = `users/me/books/recommendations?limit=${limit}`;
+          setBooks(
+            await apiClient.request(endpoint, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${auth.token}`,
+              },
+            }),
+          );
+        } else {
+          endpoint = `books/popular?limit=${limit}`;
+          promises.push(
+            apiClient
+              .request(endpoint, {
+                method: "GET",
+              })
+              .then((res) => res.books),
+          );
+        }
+        promises.push(
+          apiClient.request("classes", {
             method: "GET",
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-            },
           }),
         );
-      } else {
-        endpoint = `books/popular?limit=${limit}`;
-        const data = await apiClient.request(endpoint, {
-          method: "GET",
-        });
-        setBooks(data.books);
+        const [booksData, fetchedCategories] = await Promise.all(promises);
+        setBooks(booksData);
+        fetchedCategories.sort((a: Categorie, b: Categorie) =>
+          a.name.localeCompare(b.name),
+        );
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error("Loading error:", error);
+      } finally {
+        clearTimeout(timeoutId);
+        setIsLoading(false);
       }
-      const fetchedCategories = await apiClient.request("classes", {
-        method: "GET",
-      });
-      fetchedCategories.sort((a: Categorie, b: Categorie) =>
-        a.name.localeCompare(b.name),
-      );
-      setCategories(fetchedCategories);
-      setIsLoading(false);
     };
 
     fetchData();
